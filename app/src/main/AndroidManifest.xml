@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	package="org.ddosolitary.okcagent">
+
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+
+	<application
+		android:allowBackup="true"
+		android:icon="@mipmap/ic_launcher"
+		android:label="@string/app_name"
+		android:roundIcon="@mipmap/ic_launcher_round"
+		android:supportsRtl="true"
+		android:theme="@android:style/Theme.DeviceDefault.Light"
+		tools:ignore="GoogleAppIndexingWarning">
+		<receiver
+			android:name=".ProxyReceiver"
+			android:enabled="true"
+			android:exported="true">
+			<intent-filter>
+				<action android:name="org.ddosolitary.okcagent.action.RUN_SSH_AGENT" />
+			</intent-filter>
+		</receiver>
+		<service
+			android:name=".AgentService"
+			android:exported="false" />
+
+		<activity android:name=".MainActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity
+			android:name=".SelectProviderActivity"
+			android:label="@string/label_select_provider" />
+		<activity
+			android:name=".CallSshServiceActivity"
+			android:launchMode="singleInstance"
+			android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
+	</application>
+
+</manifest>
