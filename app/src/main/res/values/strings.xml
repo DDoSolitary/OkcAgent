@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<string name="app_name">OkcAgent</string>
 	<string name="button_select_provider">Select Provider</string>
 	<string name="button_select_key">Select Key</string>
@@ -8,11 +8,11 @@
 	<string name="text_key">Key selected.</string>
 	<string name="text_no_key">No valid key selected.</string>
 	<string name="text_ssh_waiting">Waiting for the crypto provider&#8230;</string>
-	<string name="pref_main">MAIN_PREFERENCES</string>
-	<string name="key_provider_package">PROVIDER_PACKAGE</string>
-	<string name="key_key_id">KEY_ID</string>
 	<string name="error_connect">Error occurred when connecting to the crypto provider.</string>
 	<string name="channel_service">Agent services</string>
 	<string name="notification_ssh_title">SSH Agent Service</string>
 	<string name="notification_ssh_content">Serving SSH agent requests&#8230;</string>
+	<string name="pref_main"><xliff:g>MAIN_PREFERENCES</xliff:g></string>
+	<string name="key_provider_package"><xliff:g>PROVIDER_PACKAGE</xliff:g></string>
+	<string name="key_key_id"><xliff:g>KEY_ID</xliff:g></string>
 </resources>
