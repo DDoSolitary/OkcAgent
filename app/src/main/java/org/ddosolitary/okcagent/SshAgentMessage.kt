@@ -6,7 +6,6 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 const val SSH_AGENT_FAILURE = 5
-const val SSH_AGENT_SUCCESS = 6
 const val SSH_AGENTC_REQUEST_IDENTITIES = 11
 const val SSH_AGENT_IDENTITIES_ANSWER = 12
 const val SSH_AGENTC_SIGN_REQUEST = 13
