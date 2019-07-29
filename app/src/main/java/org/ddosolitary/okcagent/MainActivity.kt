@@ -41,10 +41,10 @@ class MainActivity : Activity() {
 
 	private fun updateKeyId(keyId: String) {
 		pref.edit().apply {
-			putString(getString(R.string.key_key_id), keyId)
+			putString(getString(R.string.key_ssh_key), keyId)
 			apply()
 		}
-		findViewById<TextView>(R.id.text_key).text = getString(R.string.text_key)
+		findViewById<TextView>(R.id.text_key).text = getString(R.string.text_ssh_key)
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,10 +53,10 @@ class MainActivity : Activity() {
 		pref = getSharedPreferences(getString(R.string.pref_main), Context.MODE_PRIVATE)
 		updateProvider(pref.getString(getString(R.string.key_provider_package), null) ?: "")
 		findViewById<TextView>(R.id.text_key).text =
-			if (pref.getString(getString(R.string.key_key_id), null) == null) {
-				getString(R.string.text_no_key)
+			if (pref.getString(getString(R.string.key_ssh_key), null) == null) {
+				getString(R.string.text_no_ssh_key)
 			} else {
-				getString(R.string.text_key)
+				getString(R.string.text_ssh_key)
 			}
 	}
 

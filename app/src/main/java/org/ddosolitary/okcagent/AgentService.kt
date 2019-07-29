@@ -24,7 +24,7 @@ class AgentService : IntentService("AgentService") {
 		val bcIntent = intent?.getParcelableExtra<Intent>(EXTRA_BROADCAST_INTENT) ?: return
 		if (bcIntent.action != ACTION_RUN_SSH_AGENT) return
 		val pref = getSharedPreferences(getString(R.string.pref_main), Context.MODE_PRIVATE)
-		val keyId = pref.getString(getString(R.string.key_key_id), null) ?: return
+		val keyId = pref.getString(getString(R.string.key_ssh_key), null) ?: return
 		startActivity(Intent(this, CallSshServiceActivity::class.java).apply {
 			@Suppress("UsePropertyAccessSyntax")
 			setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

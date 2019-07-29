@@ -49,7 +49,7 @@
 		android:layout_height="wrap_content"
 		android:layout_margin="8dp"
 		android:onClick="selectKey"
-		android:text="@string/button_select_key"
+		android:text="@string/button_select_ssh_key"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/text_key" />
 </androidx.constraintlayout.widget.ConstraintLayout>
