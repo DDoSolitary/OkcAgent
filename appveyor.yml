@@ -9,3 +9,6 @@ build_script:
           iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
       }
   - gradlew.bat assembledebug
+artifacts:
+  - path: app\build\outputs\apk\debug\app-debug.apk
+  
