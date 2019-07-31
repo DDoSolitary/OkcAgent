@@ -15,5 +15,5 @@
 		android:layout_height="match_parent"
 		android:gravity="center_vertical"
 		android:layout_margin="8dp"
-		android:text="@string/text_ssh_waiting" />
+		android:text="@string/text_waiting_provider" />
 </LinearLayout>

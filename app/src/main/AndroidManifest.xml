@@ -15,20 +15,17 @@
 		android:theme="@android:style/Theme.DeviceDefault.Light"
 		tools:ignore="GoogleAppIndexingWarning">
 		<receiver
-			android:name=".ProxyReceiver"
+			android:name=".SshProxyReceiver"
 			android:enabled="true"
-			android:exported="true">
-			<intent-filter>
-				<action android:name="org.ddosolitary.okcagent.action.RUN_SSH_AGENT" />
-			</intent-filter>
-		</receiver>
+			android:exported="true"/>
 		<service
-			android:name=".AgentService"
-			android:exported="false" />
-
+			android:name=".SshAgentService"
+			android:enabled="true"
+			android:exported="false"/>
 		<activity android:name=".MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
+
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
@@ -36,7 +33,7 @@
 			android:name=".SelectProviderActivity"
 			android:label="@string/label_select_provider" />
 		<activity
-			android:name=".CallSshServiceActivity"
+			android:name=".IntentRunnerActivity"
 			android:launchMode="singleInstance"
 			android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
 	</application>

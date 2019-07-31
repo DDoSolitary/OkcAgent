@@ -3,23 +3,50 @@ package org.ddosolitary.okcagent
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
-import org.openintents.ssh.authentication.SshAuthenticationApi
+import org.openintents.ssh.authentication.SshAuthenticationApi.*
 import org.openintents.ssh.authentication.request.KeySelectionRequest
-import org.openintents.ssh.authentication.request.SigningRequest
+import org.openintents.ssh.authentication.response.KeySelectionResponse
 
 private const val REQUEST_SELECT_PROVIDER = 0
 private const val REQUEST_SELECT_KEY = 1
 
 class MainActivity : Activity() {
-	private lateinit var pref: SharedPreferences
+	private val pref by lazy {
+		getSharedPreferences(getString(R.string.pref_main), Context.MODE_PRIVATE)
+	}
+	private var sshApi: SshApi? = null
+
+	private fun selectKeyCallback(intent: Intent) {
+		val res = KeySelectionResponse(intent)
+		when (res.resultCode) {
+			RESULT_CODE_SUCCESS -> updateKeyId(res.keyId)
+			RESULT_CODE_ERROR -> showError(
+				this@MainActivity,
+				res.error?.message ?: getString(R.string.error_api)
+			)
+			RESULT_CODE_USER_INTERACTION_REQUIRED -> startIntentSenderForResult(
+				res.pendingIntent.intentSender, REQUEST_SELECT_KEY,
+				null, 0, 0, 0
+			)
+		}
+	}
 
 	private fun updateProvider(packageId: String) {
+		pref.edit().apply {
+			putString(getString(R.string.key_provider_package), packageId)
+			apply()
+		}
+		sshApi?.disconnect()
+		sshApi = SshApi(this, {
+			if (!it) {
+				disconnect()
+				showError(this@MainActivity, R.string.error_connect)
+			}
+		}, packageId).also { it.connect() }
 		val info = try {
 			packageManager.getApplicationInfo(packageId, 0)
 		} catch (e: PackageManager.NameNotFoundException) {
@@ -50,31 +77,29 @@ class MainActivity : Activity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
-		pref = getSharedPreferences(getString(R.string.pref_main), Context.MODE_PRIVATE)
-		updateProvider(pref.getString(getString(R.string.key_provider_package), null) ?: "")
-		findViewById<TextView>(R.id.text_key).text =
+		updateProvider(pref.getString(getString(R.string.key_provider_package), "") ?: "")
+		findViewById<TextView>(R.id.text_key).setText(
 			if (pref.getString(getString(R.string.key_ssh_key), null) == null) {
-				getString(R.string.text_no_ssh_key)
+				R.string.text_no_ssh_key
 			} else {
-				getString(R.string.text_ssh_key)
+				R.string.text_ssh_key
 			}
+
+		)
 	}
+
+	override fun onDestroy() {
+		sshApi?.disconnect()
+		super.onDestroy()
+	}
+
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		if (resultCode == RESULT_OK) {
 			when (requestCode) {
-				REQUEST_SELECT_PROVIDER -> {
-					val pkg = data?.getStringExtra(EXTRA_PROVIDER_PACKAGE) ?: return
-					pref.edit().apply {
-						putString(getString(R.string.key_provider_package), pkg)
-						apply()
-					}
-					updateProvider(pkg)
-				}
-				REQUEST_SELECT_KEY -> {
-					val res = data?.getParcelableExtra<Intent>(EXTRA_SSH_RESPONSE) ?: return
-					updateKeyId(res.getStringExtra(SshAuthenticationApi.EXTRA_KEY_ID) ?: return)
-				}
+				REQUEST_SELECT_PROVIDER ->
+					updateProvider(data!!.getStringExtra(EXTRA_PROVIDER_PACKAGE)!!)
+				REQUEST_SELECT_KEY -> selectKeyCallback(sshApi?.executeApi(data!!) ?: return)
 			}
 		}
 	}
@@ -87,11 +112,6 @@ class MainActivity : Activity() {
 	}
 
 	fun selectKey(@Suppress("UNUSED_PARAMETER") view: View) {
-		startActivityForResult(
-			Intent(this, CallSshServiceActivity::class.java).apply {
-				putExtra(EXTRA_SSH_REQUEST, KeySelectionRequest().toIntent())
-			},
-			REQUEST_SELECT_KEY
-		)
+		selectKeyCallback(sshApi?.executeApi(KeySelectionRequest().toIntent()) ?: return)
 	}
 }

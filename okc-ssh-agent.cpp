@@ -176,9 +176,9 @@ void on_client_connected(uv_stream_t *agent_server, int status) {
 	UV_CHECKED_CTX(uv_tcp_getsockname(ctx->app_server, (sockaddr *)&addr, &addr_len), ctx);
 	std::stringstream cmd_ss;
 	cmd_ss << "am broadcast"
-		<< " -n org.ddosolitary.okcagent/.ProxyReceiver"
+		<< " -n org.ddosolitary.okcagent/.SshProxyReceiver"
 		<< " -a org.ddosolitary.okcagent.action.RUN_SSH_AGENT"
-		<< " --ei org.ddosolitary.okcagent.extra.PROXY_PORT " << ntohs(addr.sin_port);
+		<< " --ei org.ddosolitary.okcagent.extra.SSH_PROXY_PORT " << ntohs(addr.sin_port);
 	system(cmd_ss.str().c_str());
 	ctx->timer = allocate<uv_timer_t>();
 	UV_CHECKED_EXIT(uv_timer_init(loop, ctx->timer));

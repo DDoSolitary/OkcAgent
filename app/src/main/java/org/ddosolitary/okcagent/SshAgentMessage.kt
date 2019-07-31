@@ -1,5 +1,6 @@
 package org.ddosolitary.okcagent
 
+import java.io.EOFException
 import java.io.InputStream
 import java.io.OutputStream
 import java.nio.ByteBuffer
@@ -18,7 +19,10 @@ class SshAgentMessage(val type: Int, val contents: ByteArray?) {
 			var off = 0
 			while (off < size) {
 				val cnt = stream.read(buf, off, size - off)
-				if (cnt == -1) return null
+				if (cnt == -1) {
+					if (off == 0) return null
+					else throw EOFException()
+				}
 				off += cnt
 			}
 			return buf
@@ -33,7 +37,7 @@ class SshAgentMessage(val type: Int, val contents: ByteArray?) {
 				-1 -> return null
 				else -> x
 			}
-			val contents = if (len > 1) readFull(stream, len - 1) ?: return null else null
+			val contents = if (len > 1) readFull(stream, len - 1) ?: throw EOFException() else null
 			return SshAgentMessage(type, contents)
 		}
 	}

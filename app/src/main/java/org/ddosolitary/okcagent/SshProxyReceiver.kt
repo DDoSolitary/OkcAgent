@@ -6,12 +6,13 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 
 
-class ProxyReceiver : BroadcastReceiver() {
+class SshProxyReceiver : BroadcastReceiver() {
 	override fun onReceive(context: Context, intent: Intent) {
 		ContextCompat.startForegroundService(
 			context,
-			Intent(context, AgentService::class.java).apply {
-				putExtra(EXTRA_BROADCAST_INTENT, intent)
+			Intent(context, SshAgentService::class.java).apply {
+				action = ACTION_RUN_SSH_AGENT
+				putExtra(EXTRA_SSH_PROXY_PORT, intent.getIntExtra(EXTRA_SSH_PROXY_PORT, -1))
 			}
 		)
 	}

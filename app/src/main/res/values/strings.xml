@@ -2,13 +2,16 @@
 	<string name="app_name">OkcAgent</string>
 	<string name="button_select_provider">Select Provider</string>
 	<string name="button_select_ssh_key">Select Key</string>
+	<string name="button_ok">OK</string>
 	<string name="label_select_provider">Select a crypto provider</string>
 	<string name="text_provider">Crypto provider:</string>
 	<string name="text_no_provider">No valid provider selected.</string>
 	<string name="text_ssh_key">Key selected.</string>
 	<string name="text_no_ssh_key">No valid key selected.</string>
-	<string name="text_ssh_waiting">Waiting for the crypto provider&#8230;</string>
+	<string name="text_waiting_provider">Waiting for crypto provider&#8230;</string>
+	<string name="text_error">Error</string>
 	<string name="error_connect">Error occurred when connecting to the crypto provider.</string>
+	<string name="error_api">Error occurred when invoking crypto provider.</string>
 	<string name="channel_service">Agent services</string>
 	<string name="notification_ssh_title">SSH Agent Service</string>
 	<string name="notification_ssh_content">Serving SSH agent requests&#8230;</string>
