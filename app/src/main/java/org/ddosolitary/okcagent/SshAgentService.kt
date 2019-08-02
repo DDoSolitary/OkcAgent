@@ -144,7 +144,7 @@ class SshAgentService : Service() {
 		super.onCreate()
 		createNotificationChannel(this)
 		val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_SERVICE)
-			.setSmallIcon(R.mipmap.ic_launcher_round)
+			.setSmallIcon(R.mipmap.ic_launcher)
 			.setContentTitle(getString(R.string.notification_ssh_title))
 			.setContentText(getString(R.string.notification_ssh_content))
 			.build()
