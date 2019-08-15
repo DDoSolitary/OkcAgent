@@ -16,7 +16,7 @@ const val EXTRA_CALLBACK_INTENT = "org.ddosolitary.okcagent.extra.CALLBACK_INTEN
 const val EXTRA_RESULT_INTENT = "org.ddosolitary.okcagent.extra.RESULT_INTENT"
 
 class IntentRunnerActivity : FragmentActivity() {
-	private class RequestsViewModel : ViewModel() {
+	public class RequestsViewModel : ViewModel() {
 		var requestCode = 0
 		val requestMap = mutableMapOf<Int, Intent>()
 	}
