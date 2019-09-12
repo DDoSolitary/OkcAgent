@@ -7,3 +7,7 @@ jobs:
       - run: |
           sudo $ANDROID_SDK_ROOT/../tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "build-tools;29.0.2" "platforms;android-29"
           ./gradlew assembledebug
+      - uses: actions/upload-artifact@master
+        with:
+          name: APK file
+          path: app/build/outputs/apk/debug/app-debug.apk
