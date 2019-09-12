@@ -4,4 +4,6 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@master
-      - run: ./gradlew assembledebug
+      - run: |
+          sudo $ANDROID_SDK_ROOT/../tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "build-tools;29.0.2" "platforms;android-29"
+          ./gradlew assembledebug
