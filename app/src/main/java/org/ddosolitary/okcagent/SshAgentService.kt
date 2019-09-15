@@ -84,11 +84,11 @@ class SshAgentService : Service() {
 				.getString(getString(R.string.key_ssh_key), "") ?: ""
 			val lock = Object()
 			var connRes = false
-			api = SshApi(this, { res ->
+			api = SshApi(this) { res ->
 				if (!res) showError(this@SshAgentService, R.string.error_connect)
 				connRes = res
 				synchronized(lock) { lock.notify() }
-			}).also { it.connect() }
+			}.also { it.connect() }
 			synchronized(lock) { lock.wait() }
 			if (!connRes) throw IllegalStateException()
 			while (true) {

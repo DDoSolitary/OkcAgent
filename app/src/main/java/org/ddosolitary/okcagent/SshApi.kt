@@ -8,18 +8,13 @@ import org.openintents.ssh.authentication.SshAuthenticationConnection
 
 class SshApi(
 	private val context: Context,
-	private val connectCallback: SshApi.(Boolean) -> Unit,
-	private val packageId: String? = null
+	private val connectCallback: SshApi.(Boolean) -> Unit
 ) {
 	private var conn: SshAuthenticationConnection? = null
 	private var api: SshAuthenticationApi? = null
 
 	fun connect() {
-		val pref = context.getSharedPreferences(
-			context.getString(R.string.pref_main),
-			Context.MODE_PRIVATE
-		)
-		val pkg = packageId ?: pref.getString(context.getString(R.string.key_provider_package), "") ?: ""
+		val pkg = context.getString(R.string.provider_package_id)
 		conn = SshAuthenticationConnection(context, pkg).also {
 			val connRes = it.connect(object : SshAuthenticationConnection.OnBound {
 				override fun onBound(service: ISshAuthenticationService) {

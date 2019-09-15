@@ -25,13 +25,9 @@
 		<activity android:name=".MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
-
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity
-			android:name=".SelectProviderActivity"
-			android:label="@string/label_select_provider" />
 		<activity
 			android:name=".IntentRunnerActivity"
 			android:launchMode="singleInstance"
