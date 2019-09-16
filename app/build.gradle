@@ -31,4 +31,5 @@ dependencies {
 	implementation 'androidx.recyclerview:recyclerview:1.0.0'
 	implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
 	implementation 'org.sufficientlysecure:sshauthentication-api:1.0'
+	implementation 'org.sufficientlysecure:openpgp-api:12.0'
 }

@@ -5,11 +5,12 @@ import android.content.Intent
 import org.openintents.ssh.authentication.ISshAuthenticationService
 import org.openintents.ssh.authentication.SshAuthenticationApi
 import org.openintents.ssh.authentication.SshAuthenticationConnection
+import java.io.Closeable
 
 class SshApi(
 	private val context: Context,
 	private val connectCallback: SshApi.(Boolean) -> Unit
-) {
+) : Closeable {
 	private var conn: SshAuthenticationConnection? = null
 	private var api: SshAuthenticationApi? = null
 
@@ -30,11 +31,11 @@ class SshApi(
 		}
 	}
 
-	fun disconnect() {
+	fun executeApi(intent: Intent): Intent? = api?.executeApi(intent)
+
+	override fun close() {
 		conn?.let {
 			if (it.isConnected) it.disconnect()
 		}
 	}
-
-	fun executeApi(intent: Intent): Intent? = api?.executeApi(intent)
 }
