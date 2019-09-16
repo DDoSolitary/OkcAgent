@@ -32,6 +32,10 @@
 			android:name=".IntentRunnerActivity"
 			android:launchMode="singleInstance"
 			android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
+		<activity
+			android:name=".ErrorDialogActivity"
+			android:taskAffinity=""
+			android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
 	</application>
 
 </manifest>
