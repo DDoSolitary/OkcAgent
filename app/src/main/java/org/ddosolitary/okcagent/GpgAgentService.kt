@@ -90,6 +90,9 @@ class GpgAgentService : AgentService() {
 				intent.getStringArrayExtra(EXTRA_GPG_ARGS)!!
 					.map { Base64.decode(it, Base64.DEFAULT).toString(Charsets.UTF_8) }
 			)
+			for (msg in args.warnings) {
+				writeString(controlOutput, msg)
+			}
 			val keyId = getSharedPreferences(getString(R.string.pref_main), Context.MODE_PRIVATE)
 				.getLong(getString(R.string.key_gpg_key), -1)
 			Socket("127.0.0.1", port).use { inputSocket ->

@@ -8,6 +8,7 @@
 	<string name="text_no_gpg_key">No valid GPG key selected.</string>
 	<string name="text_waiting_provider">Waiting for crypto provider&#8230;</string>
 	<string name="text_error">Error</string>
+	<string name="text_warning">Warning</string>
 	<string name="error_connect">Error occurred when connecting to the crypto provider.</string>
 	<string name="error_api">Error occurred when invoking crypto provider.</string>
 	<string name="error_option">Invalid option: <xliff:g>%s</xliff:g></string>
@@ -25,4 +26,5 @@
 	<string name="msg_signature_from">Signature from: <xliff:g>%s</xliff:g></string>
 	<string name="msg_signature_result">Verification result: <xliff:g>%s</xliff:g></string>
 	<string name="msg_decryption_result">Decryption result: <xliff:g>%s</xliff:g></string>
+	<string name="msg_option_ignored">The option \"<xliff:g>%s</xliff:g>\" is not supported and thus ignored.</string>
 </resources>
