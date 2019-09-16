@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 
-private const val REQUEST_API_CALL = 0
 const val ACTION_RUN_PENDING_INTENT = "org.ddosolitary.okcagent.action.RUN_PENDING_INTENT"
 const val ACTION_FINISH = "org.ddosolitary.okcagent.action.FINISH"
 const val EXTRA_API_INTENT = "org.ddosolitary.okcagent.extra.API_INTENT"
@@ -27,10 +26,10 @@ class IntentRunnerActivity : FragmentActivity() {
 		when (intent.action) {
 			ACTION_FINISH -> finish()
 			ACTION_RUN_PENDING_INTENT -> {
-				vm.requestMap[vm.requestCode++] = intent.getParcelableExtra(EXTRA_CALLBACK_INTENT)!!
+				vm.requestMap[vm.requestCode] = intent.getParcelableExtra(EXTRA_CALLBACK_INTENT)!!
 				startIntentSenderForResult(
 					intent.getParcelableExtra<PendingIntent>(EXTRA_API_INTENT)!!.intentSender,
-					REQUEST_API_CALL, null, 0, 0, 0
+					vm.requestCode++, null, 0, 0, 0
 				)
 			}
 		}
