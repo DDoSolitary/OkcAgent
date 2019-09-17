@@ -18,42 +18,6 @@ const val EXTRA_GPG_ARGS = "org.ddosolitary.okcagent.extra.GPG_ARGS"
 private const val NOTIFICATION_ID_GPG = 2
 
 class GpgAgentService : AgentService() {
-	private class OutputWrapper(private val stream: OutputStream) : OutputStream() {
-		private var written = false
-
-		override fun write(b: Int) {
-			written = true
-			stream.write(b)
-		}
-
-		override fun write(b: ByteArray) {
-			written = true
-			stream.write(b)
-		}
-
-		override fun write(b: ByteArray, off: Int, len: Int) {
-			written = true
-			stream.write(b, off, len)
-		}
-
-		override fun flush() {
-			stream.flush()
-		}
-
-		override fun close() {}
-	}
-
-	private fun writeString(output: OutputStream, str: String) {
-		val strBuf = str.toByteArray(Charsets.UTF_8)
-		val lenBuf = byteArrayOf(
-			(strBuf.size shr 8).toByte(),
-			(strBuf.size and Byte.MAX_VALUE.toInt()).toByte()
-		)
-		output.write(lenBuf)
-		output.write(strBuf)
-		output.flush()
-	}
-
 	private fun handleSigResult(res: OpenPgpSignatureResult, output: OutputStream): Boolean {
 		val resStr = when (res.result) {
 			-1 -> "RESULT_NO_SIGNATURE"
@@ -95,17 +59,14 @@ class GpgAgentService : AgentService() {
 			}
 			val keyId = getSharedPreferences(getString(R.string.pref_main), Context.MODE_PRIVATE)
 				.getLong(getString(R.string.key_gpg_key), -1)
-			Socket("127.0.0.1", port).use { inputSocket ->
-				inputSocket.getOutputStream().let {
-					it.write(1)
-					writeString(it, if (args.arguments.isNotEmpty()) args.arguments.last() else "")
-				}
-				val input = inputSocket.getInputStream()
-				Socket("127.0.0.1", port).use { outputSocket ->
-					val output = OutputWrapper(outputSocket.getOutputStream().also {
-						it.write(2)
-						writeString(it, args.options["output"] ?: "")
-					})
+			GpgInputWrapper(
+				port,
+				if (args.arguments.isNotEmpty()) args.arguments.last() else "",
+				this
+			).use { input ->
+				GpgOutputWrapper(
+					port, args.options["output"], args.options.containsKey("armor")
+				).use { output ->
 					val lock = Object()
 					var connRes = false
 					GpgApi(this) { res ->
@@ -119,7 +80,7 @@ class GpgAgentService : AgentService() {
 						val reqIntent = Intent()
 						reqIntent.putExtra(
 							EXTRA_REQUEST_ASCII_ARMOR,
-							args.options.containsKey("armor")
+							args.options.containsKey("armor") || args.options.containsKey("clear-sign")
 						)
 						args.options["compress-level"]?.let {
 							reqIntent.putExtra(EXTRA_ENABLE_COMPRESSION, it.toInt() > 0)
@@ -231,6 +192,7 @@ class GpgAgentService : AgentService() {
 							}
 							else -> throw Exception(getString(R.string.error_gpg_no_action))
 						}
+						input.autoReopen = false
 					}
 				}
 			}
