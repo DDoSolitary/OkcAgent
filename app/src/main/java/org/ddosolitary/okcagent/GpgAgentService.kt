@@ -61,11 +61,11 @@ class GpgAgentService : AgentService() {
 				.getLong(getString(R.string.key_gpg_key), -1)
 			GpgInputWrapper(
 				port,
-				if (args.arguments.isNotEmpty()) args.arguments.last() else "",
+				if (args.arguments.isNotEmpty()) args.arguments.last() else "-",
 				this
 			).use { input ->
 				GpgOutputWrapper(
-					port, args.options["output"], args.options.containsKey("armor")
+					port, args.options["output"] ?: "-", args.options.containsKey("armor")
 				).use { output ->
 					val lock = Object()
 					var connRes = false
@@ -191,6 +191,12 @@ class GpgAgentService : AgentService() {
 								)
 							}
 							else -> throw Exception(getString(R.string.error_gpg_no_action))
+						}
+						if (reqIntent.hasExtra(EXTRA_SIGN_KEY_ID) && args.options.containsKey("status-fd")) {
+							writeString(
+								controlOutput,
+								"[GNUPG:] SIG_CREATED This line is only used to make git happy!"
+							)
 						}
 						input.autoReopen = false
 					}

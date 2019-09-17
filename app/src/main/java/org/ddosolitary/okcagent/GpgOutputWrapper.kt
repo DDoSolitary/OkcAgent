@@ -5,7 +5,7 @@ import java.net.Socket
 
 class GpgOutputWrapper(
 	private val port: Int,
-	private val path: String?,
+	private val path: String,
 	private val translateLf: Boolean
 ) : OutputStream() {
 	private var stream: OutputStream? = null
@@ -19,7 +19,7 @@ class GpgOutputWrapper(
 		if (stream == null) {
 			stream = Socket("127.0.0.1", port).getOutputStream().also {
 				it.write(2)
-				writeString(it, path ?: "")
+				writeString(it, path)
 			}
 		}
 		stream!!.let {

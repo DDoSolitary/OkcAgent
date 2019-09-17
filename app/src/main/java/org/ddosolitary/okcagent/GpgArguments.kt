@@ -31,7 +31,8 @@ class GpgArguments(
 			OptionInfo("output", null, 'o', true),
 			OptionInfo("local-user", null, 'u', true, true),
 			OptionInfo("default-user", null, null, false, true),
-			OptionInfo("status-fd", null, null, true, true)
+			OptionInfo("status-fd", null, null, true, false),
+			OptionInfo("keyid-format", null, null, true, true)
 		)
 
 		private fun errorInvalidOption(context: Context, name: String): Nothing {
@@ -71,7 +72,7 @@ class GpgArguments(
 						if (value.isEmpty()) options[info.longName] = null
 						else errorInvalidOption(context, name)
 					}
-				} else if (s.startsWith('-')) {
+				} else if (s.startsWith('-') && s != "-") {
 					for (i in 1 until s.length) {
 						if (pendingArg != null) {
 							options[pendingArg] = s.substring(i)
