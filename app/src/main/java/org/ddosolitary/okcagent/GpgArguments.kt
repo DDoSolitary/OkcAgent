@@ -57,7 +57,7 @@ class GpgArguments(
 					var pos = s.indexOf('=')
 					if (pos == -1) pos = s.length
 					val name = s.substring(2, pos)
-					val value = s.substring(pos)
+					val value = s.substring(minOf(s.length, pos + 1))
 					val info = OptionList.find { it.longName == name || it.altLongName == name }
 						?: errorInvalidOption(context, name)
 					checkSupported(name, info)
