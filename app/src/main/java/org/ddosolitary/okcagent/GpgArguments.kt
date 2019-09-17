@@ -30,7 +30,8 @@ class GpgArguments(
 			OptionInfo("set-filename", null, null, true),
 			OptionInfo("output", null, 'o', true),
 			OptionInfo("local-user", null, 'u', true, true),
-			OptionInfo("default-user", null, null, false, true)
+			OptionInfo("default-user", null, null, false, true),
+			OptionInfo("status-fd", null, null, true, true)
 		)
 
 		private fun errorInvalidOption(context: Context, name: String): Nothing {
