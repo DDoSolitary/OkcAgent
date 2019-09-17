@@ -117,8 +117,10 @@ class GpgAgentService : AgentService() {
 						synchronized(lock) { lock.wait() }
 						if (!connRes) throw IllegalStateException()
 						val reqIntent = Intent()
-						if (args.options.containsKey("armor"))
-							reqIntent.putExtra(EXTRA_REQUEST_ASCII_ARMOR, true)
+						reqIntent.putExtra(
+							EXTRA_REQUEST_ASCII_ARMOR,
+							args.options.containsKey("armor")
+						)
 						args.options["compress-level"]?.let {
 							reqIntent.putExtra(EXTRA_ENABLE_COMPRESSION, it.toInt() > 0)
 						}
