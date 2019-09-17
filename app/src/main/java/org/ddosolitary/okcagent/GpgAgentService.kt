@@ -71,7 +71,7 @@ class GpgAgentService : AgentService() {
 			getString(R.string.msg_signature_from).format(res.primaryUserId ?: "N/A")
 		)
 		writeString(output, getString(R.string.msg_signature_result).format(resStr))
-		return res.result == 1 || res.result == 3
+		return res.result == -1 || res.result == 1 || res.result == 3
 	}
 
 	override fun getErrorMessage(intent: Intent): String? {
