@@ -62,12 +62,12 @@ class GpgArguments(
 					checkSupported(name, info)
 					if (info.hasValue) {
 						if (value.isEmpty()) {
-							pendingArg = name
+							pendingArg = info.longName
 						} else {
-							options[name] = value
+							options[info.longName] = value
 						}
 					} else {
-						if (value.isEmpty()) options[name] = null
+						if (value.isEmpty()) options[info.longName] = null
 						else errorInvalidOption(context, name)
 					}
 				} else if (s.startsWith('-')) {
