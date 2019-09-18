@@ -64,9 +64,14 @@ class GpgAgentService : AgentService() {
 				if (args.arguments.isNotEmpty()) args.arguments.last() else "-",
 				this
 			).use { input ->
+				val wrappedInput = input.getAutoReopenStream()
 				GpgOutputWrapper(
-					port, args.options["output"] ?: "-", args.options.containsKey("armor")
+					port,
+					args.options["output"] ?: "-",
+					args.options.containsKey("armor"),
+					this
 				).use { output ->
+					val wrappedOutput = output.getAutoReopenStream()
 					val lock = Object()
 					var connRes = false
 					GpgApi(this) { res ->
@@ -92,8 +97,10 @@ class GpgAgentService : AgentService() {
 							args.options.containsKey("clear-sign") -> {
 								reqIntent.action = ACTION_CLEARTEXT_SIGN
 								reqIntent.putExtra(EXTRA_SIGN_KEY_ID, keyId)
-								val resIntent =
-									callApi({ api.executeApi(it, input, output) }, reqIntent, port)
+								val resIntent = callApi(
+									{ api.executeApi(it, wrappedInput, wrappedOutput) },
+									reqIntent, port
+								)
 								if (resIntent == null) {
 									success = false
 									return@runAgent
@@ -103,8 +110,10 @@ class GpgAgentService : AgentService() {
 							args.options.containsKey("detach-sign") -> {
 								reqIntent.action = ACTION_DETACHED_SIGN
 								reqIntent.putExtra(EXTRA_SIGN_KEY_ID, keyId)
-								val resIntent =
-									callApi({ api.executeApi(it, input, null) }, reqIntent, port)
+								val resIntent = callApi(
+									{ api.executeApi(it, wrappedInput, null) },
+									reqIntent, port
+								)
 								if (resIntent == null) {
 									success = false
 									return@runAgent
@@ -126,8 +135,10 @@ class GpgAgentService : AgentService() {
 								} else {
 									reqIntent.action = ACTION_ENCRYPT
 								}
-								val resIntent =
-									callApi({ api.executeApi(it, input, output) }, reqIntent, port)
+								val resIntent = callApi(
+									{ api.executeApi(it, wrappedInput, wrappedOutput) },
+									reqIntent, port
+								)
 								if (resIntent == null) {
 									success = false
 									return@runAgent
@@ -148,8 +159,10 @@ class GpgAgentService : AgentService() {
 										)
 									}
 								}
-								val resIntent =
-									callApi({ api.executeApi(it, input, null) }, reqIntent, port)
+								val resIntent = callApi(
+									{ api.executeApi(it, wrappedInput, wrappedOutput) },
+									reqIntent, port
+								)
 								if (resIntent == null) {
 									success = false
 									return@runAgent
@@ -164,7 +177,7 @@ class GpgAgentService : AgentService() {
 							args.options.containsKey("decrypt") -> {
 								reqIntent.action = ACTION_DECRYPT_VERIFY
 								val resIntent = callApi(
-									{ api.executeApi(it, input, output) },
+									{ api.executeApi(it, wrappedInput, wrappedOutput) },
 									reqIntent, port
 								)
 								if (resIntent == null) {
@@ -198,7 +211,6 @@ class GpgAgentService : AgentService() {
 								"[GNUPG:] SIG_CREATED This line is only used to make git happy!"
 							)
 						}
-						input.autoReopen = false
 					}
 				}
 			}
