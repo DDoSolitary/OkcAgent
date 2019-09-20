@@ -39,6 +39,6 @@ This project consists of two components: the OkcAgent app, and command line util
     - `okc-gpg` supports a limited set of GPG options so you can use it to perform some crypto operations. Read [GpgArguments.kt](https://github.com/DDoSolitary/OkcAgent/blob/master/app/src/main/java/org/ddosolitary/okcagent/GpgArguments.kt) for a complete list of supported options.
 
 
-# Notes about the app
+## Notes about the app
 
 This app is available in Play Store at the price of $1. I didn't intend to make profit from this project and simply consider it as a way of donation. If you don't want to pay, you can always download the dev releases for free using the links mentioned above, or even build the app from its source code. However, please note that the APK files from these two sources are signed with different keys, which means that you have to uninstall the existing app first if you want to switch between them.
