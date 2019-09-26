@@ -4,13 +4,17 @@ import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
+import java.lang.Exception
 import org.openintents.openpgp.OpenPgpError
 import org.openintents.openpgp.util.OpenPgpApi.*
 import org.openintents.ssh.authentication.request.KeySelectionRequest
 import org.openintents.ssh.authentication.response.KeySelectionResponse
+
 
 private const val REQUEST_SELECT_SSH_KEY = 1
 private const val REQUEST_SELECT_GPG_KEY = 2
@@ -75,18 +79,31 @@ class MainActivity : Activity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
-		sshApi = SshApi(this) {
-			if (!it) {
-				close()
-				showError(this@MainActivity, R.string.error_connect)
-			}
-		}.also { it.connect() }
-		gpgApi = GpgApi(this) {
-			if (!it) {
-				close()
-				showError(this@MainActivity, R.string.error_connect)
-			}
-		}.also { it.connect() }
+		var found = true
+		try {
+			packageManager.getPackageInfo(getString(R.string.provider_package_id), 0)
+		} catch (_: Exception) {
+			found = false
+		}
+		if (found) {
+			sshApi = SshApi(this) {
+				if (!it) {
+					close()
+					showError(this@MainActivity, R.string.error_connect)
+				}
+			}.also { it.connect() }
+			gpgApi = GpgApi(this) {
+				if (!it) {
+					close()
+					showError(this@MainActivity, R.string.error_connect)
+				}
+			}.also { it.connect() }
+		} else {
+			findViewById<Button>(R.id.button_ssh_key).isEnabled = false
+			findViewById<Button>(R.id.button_gpg_key).isEnabled = false
+			findViewById<TextView>(R.id.text_no_provider).visibility = View.VISIBLE
+			findViewById<Button>(R.id.button_install_provider).visibility = View.VISIBLE
+		}
 		findViewById<TextView>(R.id.text_ssh_key).setText(
 			if (pref.getString(getString(R.string.key_ssh_key), null) == null) {
 				R.string.text_no_ssh_key
@@ -129,5 +146,10 @@ class MainActivity : Activity() {
 		selectGpgKeyCallback(gpgApi?.executeApi(Intent().apply {
 			action = ACTION_GET_SIGN_KEY_ID
 		}, null, null) ?: return)
+	}
+
+	fun installProvider(@Suppress("UNUSED_PARAMETER") view: View) {
+		val uri = "market://details?id=%s".format(getString(R.string.provider_package_id))
+		startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
 	}
 }
