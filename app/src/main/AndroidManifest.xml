@@ -47,11 +47,11 @@
 		<activity
 			android:name=".IntentRunnerActivity"
 			android:launchMode="singleInstance"
-			android:theme="@style/AppTheme"/>
+			android:theme="@style/AppTheme.Dialog"/>
 		<activity
 			android:name=".ErrorDialogActivity"
 			android:taskAffinity=""
-			android:theme="@style/AppTheme" />
+			android:theme="@style/AppTheme.Dialog" />
 	</application>
 
 </manifest>
