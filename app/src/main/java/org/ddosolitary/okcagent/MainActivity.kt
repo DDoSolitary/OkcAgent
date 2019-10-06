@@ -101,8 +101,7 @@ class MainActivity : Activity() {
 		} else {
 			findViewById<Button>(R.id.button_ssh_key).isEnabled = false
 			findViewById<Button>(R.id.button_gpg_key).isEnabled = false
-			findViewById<TextView>(R.id.text_no_provider).visibility = View.VISIBLE
-			findViewById<Button>(R.id.button_install_provider).visibility = View.VISIBLE
+			findViewById<Button>(R.id.layout_no_provider).visibility = View.VISIBLE
 		}
 		findViewById<TextView>(R.id.text_ssh_key).setText(
 			if (pref.getString(getString(R.string.key_ssh_key), null) == null) {
