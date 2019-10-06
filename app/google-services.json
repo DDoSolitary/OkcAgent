@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "535652578545",
+    "firebase_url": "https://okcagent-620df.firebaseio.com",
+    "project_id": "okcagent-620df",
+    "storage_bucket": "okcagent-620df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535652578545:android:50099abcaa0d9a2096a550",
+        "android_client_info": {
+          "package_name": "org.ddosolitary.okcagent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "535652578545-t8saqs18phckcav6u9vpjq5i1jpv533b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.ddosolitary.okcagent",
+            "certificate_hash": "a8b6599c8251bca2dd28ad51018e2917ef256511"
+          }
+        },
+        {
+          "client_id": "535652578545-hurncj54o6n0ej3qvdes1h7vsm0lf4kk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAAAoyXlLo1vVWAU0nNxFBvIZ55-535_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "535652578545-hurncj54o6n0ej3qvdes1h7vsm0lf4kk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
