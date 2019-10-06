@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Base64
 import androidx.core.app.NotificationCompat
+import com.crashlytics.android.Crashlytics
 import org.ddosolitary.okcagent.AgentService
 import org.ddosolitary.okcagent.R
 import org.ddosolitary.okcagent.showError
@@ -77,7 +78,8 @@ class SshAgentService : AgentService() {
 					(resMsg ?: SshAgentMessage(SSH_AGENT_FAILURE, null)).writeToStream(output)
 				}
 			}
-		} catch (_: Exception) {
+		} catch (e: Exception) {
+			Crashlytics.logException(e)
 			socket?.setSoLinger(true, 0)
 		} finally {
 			socket?.close()

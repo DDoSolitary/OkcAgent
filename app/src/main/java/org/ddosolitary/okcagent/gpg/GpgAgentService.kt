@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Base64
 import androidx.core.app.NotificationCompat
+import com.crashlytics.android.Crashlytics
 import org.ddosolitary.okcagent.AgentService
 import org.ddosolitary.okcagent.R
 import org.ddosolitary.okcagent.showError
@@ -215,6 +216,7 @@ class GpgAgentService : AgentService() {
 				}
 			}
 		} catch (e: Exception) {
+			Crashlytics.logException(e)
 			success = false
 			controlOutput?.let {
 				writeString(it, "Error: %s".format(e.message))
