@@ -8,6 +8,7 @@
 
 	<application
 		android:allowBackup="true"
+		android:fullBackupContent="true"
 		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
 		android:roundIcon="@mipmap/ic_launcher"
@@ -17,19 +18,23 @@
 		<receiver
 			android:name=".SshProxyReceiver"
 			android:enabled="true"
-			android:exported="true"/>
+			android:exported="true"
+			tools:ignore="ExportedReceiver" />
 		<receiver
 			android:name=".GpgProxyReceiver"
 			android:enabled="true"
-			android:exported="true"/>
+			android:exported="true"
+			tools:ignore="ExportedReceiver" />
+
 		<service
 			android:name=".SshAgentService"
 			android:enabled="true"
-			android:exported="false"/>
+			android:exported="false" />
 		<service
 			android:name=".GpgAgentService"
 			android:enabled="true"
-			android:exported="false"/>
+			android:exported="false" />
+
 		<activity android:name=".MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
