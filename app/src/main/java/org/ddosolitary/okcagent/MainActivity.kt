@@ -10,6 +10,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import org.ddosolitary.okcagent.gpg.GpgApi
+import org.ddosolitary.okcagent.ssh.SshApi
 import org.openintents.openpgp.OpenPgpError
 import org.openintents.openpgp.util.OpenPgpApi.*
 import org.openintents.ssh.authentication.request.KeySelectionRequest

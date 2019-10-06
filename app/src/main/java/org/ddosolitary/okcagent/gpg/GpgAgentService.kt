@@ -1,17 +1,15 @@
-package org.ddosolitary.okcagent
+package org.ddosolitary.okcagent.gpg
 
 import android.content.Context
 import android.content.Intent
 import android.util.Base64
 import androidx.core.app.NotificationCompat
+import org.ddosolitary.okcagent.*
 import org.openintents.openpgp.OpenPgpDecryptionResult
 import org.openintents.openpgp.OpenPgpError
 import org.openintents.openpgp.OpenPgpSignatureResult
 import org.openintents.openpgp.util.OpenPgpApi.*
-import java.io.InputStream
 import java.io.OutputStream
-import java.lang.Exception
-import java.lang.IllegalStateException
 import java.net.Socket
 
 const val EXTRA_GPG_ARGS = "org.ddosolitary.okcagent.extra.GPG_ARGS"

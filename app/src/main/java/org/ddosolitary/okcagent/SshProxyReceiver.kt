@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
+import org.ddosolitary.okcagent.ssh.SshAgentService
 
 class SshProxyReceiver : BroadcastReceiver() {
 	override fun onReceive(context: Context, intent: Intent) {

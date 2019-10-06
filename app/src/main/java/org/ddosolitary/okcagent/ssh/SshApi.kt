@@ -1,7 +1,8 @@
-package org.ddosolitary.okcagent
+package org.ddosolitary.okcagent.ssh
 
 import android.content.Context
 import android.content.Intent
+import org.ddosolitary.okcagent.R
 import org.openintents.ssh.authentication.ISshAuthenticationService
 import org.openintents.ssh.authentication.SshAuthenticationApi
 import org.openintents.ssh.authentication.SshAuthenticationConnection

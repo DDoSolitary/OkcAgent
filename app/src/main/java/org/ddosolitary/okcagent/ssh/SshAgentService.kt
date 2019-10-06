@@ -1,17 +1,19 @@
-package org.ddosolitary.okcagent
+package org.ddosolitary.okcagent.ssh
 
 import android.content.Context
 import android.content.Intent
 import android.util.Base64
 import androidx.core.app.NotificationCompat
+import org.ddosolitary.okcagent.AgentService
+import org.ddosolitary.okcagent.NOTIFICATION_CHANNEL_SERVICE
+import org.ddosolitary.okcagent.R
+import org.ddosolitary.okcagent.showError
 import org.openintents.ssh.authentication.SshAuthenticationApi.EXTRA_ERROR
 import org.openintents.ssh.authentication.SshAuthenticationApiError
 import org.openintents.ssh.authentication.request.SigningRequest
 import org.openintents.ssh.authentication.request.SshPublicKeyRequest
 import org.openintents.ssh.authentication.response.SigningResponse
 import org.openintents.ssh.authentication.response.SshPublicKeyResponse
-import java.lang.Exception
-import java.lang.IllegalStateException
 import java.net.Socket
 
 private const val NOTIFICATION_ID_SSH = 1

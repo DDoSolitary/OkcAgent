@@ -1,4 +1,4 @@
-package org.ddosolitary.okcagent
+package org.ddosolitary.okcagent.ssh
 
 import java.io.EOFException
 import java.io.InputStream

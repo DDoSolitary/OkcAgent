@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
+import org.ddosolitary.okcagent.gpg.EXTRA_GPG_ARGS
+import org.ddosolitary.okcagent.gpg.GpgAgentService
 
 class GpgProxyReceiver : BroadcastReceiver() {
 	override fun onReceive(context: Context, intent: Intent) {

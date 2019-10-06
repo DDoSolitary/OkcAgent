@@ -1,4 +1,4 @@
-package org.ddosolitary.okcagent
+package org.ddosolitary.okcagent.ssh
 
 import java.nio.ByteBuffer
 import java.nio.ByteOrder

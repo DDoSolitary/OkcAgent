@@ -1,7 +1,8 @@
-package org.ddosolitary.okcagent
+package org.ddosolitary.okcagent.gpg
 
 import android.content.Context
 import android.content.Intent
+import org.ddosolitary.okcagent.R
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.util.OpenPgpApi
 import org.openintents.openpgp.util.OpenPgpServiceConnection

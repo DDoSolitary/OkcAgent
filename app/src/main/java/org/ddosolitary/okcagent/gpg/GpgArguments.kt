@@ -1,7 +1,7 @@
-package org.ddosolitary.okcagent
+package org.ddosolitary.okcagent.gpg
 
 import android.content.Context
-import java.lang.Exception
+import org.ddosolitary.okcagent.R
 
 class GpgArguments(
 	val options: Map<String, String?>,

@@ -27,11 +27,11 @@
 			tools:ignore="ExportedReceiver" />
 
 		<service
-			android:name=".SshAgentService"
+			android:name=".ssh.SshAgentService"
 			android:enabled="true"
 			android:exported="false" />
 		<service
-			android:name=".GpgAgentService"
+			android:name=".gpg.GpgAgentService"
 			android:enabled="true"
 			android:exported="false" />
 

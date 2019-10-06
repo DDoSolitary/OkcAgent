@@ -1,6 +1,7 @@
-package org.ddosolitary.okcagent
+package org.ddosolitary.okcagent.gpg
 
 import android.content.Context
+import org.ddosolitary.okcagent.writeString
 import java.io.File
 import java.io.OutputStream
 import java.net.Socket
