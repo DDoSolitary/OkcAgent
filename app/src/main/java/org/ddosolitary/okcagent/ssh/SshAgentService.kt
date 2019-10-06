@@ -90,7 +90,7 @@ class SshAgentService : AgentService() {
 	override fun onCreate() {
 		super.onCreate()
 		val notification = NotificationCompat.Builder(this, getString(R.string.channel_id_service))
-			.setSmallIcon(R.mipmap.ic_launcher)
+			.setSmallIcon(R.drawable.ic_key)
 			.setContentTitle(getString(R.string.notification_ssh_title))
 			.setContentText(getString(R.string.notification_ssh_content))
 			.build()
