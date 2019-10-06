@@ -5,6 +5,7 @@ import java.nio.ByteOrder
 
 @Suppress("UsePropertyAccessSyntax")
 class SshSignRequest constructor(bytes: ByteArray) {
+	@Suppress("MemberVisibilityCanBePrivate")
 	val keyBlob: ByteArray
 	val data: ByteArray
 	val flags: Int

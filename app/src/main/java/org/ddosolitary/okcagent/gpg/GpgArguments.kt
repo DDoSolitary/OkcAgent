@@ -17,6 +17,7 @@ class GpgArguments(
 			val notSupported: Boolean = false
 		)
 
+		@Suppress("BooleanLiteralArgument")
 		private val OptionList = arrayOf(
 			OptionInfo("sign", null, 's', false),
 			OptionInfo("clear-sign", "clearsign", null, false),
