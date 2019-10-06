@@ -81,7 +81,7 @@ class GpgAgentService : AgentService() {
 					}.use { api ->
 						api.connect()
 						synchronized(lock) { lock.wait() }
-						if (!connRes) throw IllegalStateException()
+						check(connRes)
 						val reqIntent = Intent()
 						reqIntent.putExtra(
 							EXTRA_REQUEST_ASCII_ARMOR,

@@ -37,7 +37,7 @@ class SshAgentService : AgentService() {
 			}.use { api ->
 				api.connect()
 				synchronized(lock) { lock.wait() }
-				if (!connRes) throw IllegalStateException()
+				check(connRes)
 				val executeApi = { reqIntent: Intent -> api.executeApi(reqIntent) }
 				while (true) {
 					val req = SshAgentMessage.readFromStream(input) ?: break
