@@ -1,32 +1,33 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<string name="app_name">OkcAgent</string>
-	<string name="button_select_key">Select Key</string>
-	<string name="button_ok">OK</string>
 	<string name="button_install">Install Now</string>
-	<string name="text_has_ssh_key">SSH key selected.</string>
-	<string name="text_no_ssh_key">No valid SSH key selected.</string>
-	<string name="text_has_gpg_key">GPG key selected.</string>
-	<string name="text_no_gpg_key">No valid GPG key selected.</string>
-	<string name="text_waiting_provider">Waiting for crypto provider&#8230;</string>
-	<string name="text_error">Error</string>
-	<string name="text_warning">Warning</string>
-	<string name="text_no_provider">The OpenKeychain app, which this app relies upon, is not installed on this device. You need to install OpenKeychain before being able to use this app.</string>
-	<string name="error_connect">Error occurred when connecting to the crypto provider. This app requires the OpenKeychain app to function properly. Please make sure that OpenKeychain has been installed on your device.</string>
-	<string name="error_api">Error occurred when invoking crypto provider.</string>
-	<string name="error_option">Invalid option: <xliff:g>%s</xliff:g></string>
-	<string name="error_gpg_no_action">No supported action is found.</string>
-	<string name="error_required_option">Required option \"<xliff:g>%s</xliff:g>\" is not found.</string>
+	<string name="button_ok">OK</string>
+	<string name="button_select_key">Select Key</string>
 	<string name="channel_service">Agent services</string>
-	<string name="notification_ssh_title">SSH Agent Service</string>
-	<string name="notification_ssh_content">Serving SSH agent requests&#8230;</string>
-	<string name="notification_gpg_title">GPG Agent Service</string>
-	<string name="notification_gpg_content">Serving GPG requests&#8230;</string>
-	<string name="provider_package_id"><xliff:g>org.sufficientlysecure.keychain</xliff:g></string>
-	<string name="pref_main"><xliff:g>MAIN_PREFERENCES</xliff:g></string>
-	<string name="key_ssh_key"><xliff:g>SSH_KEY_ID</xliff:g></string>
-	<string name="key_gpg_key"><xliff:g>GPG_KEY_ID</xliff:g></string>
-	<string name="msg_signature_from">Signature from: <xliff:g>%s</xliff:g></string>
-	<string name="msg_signature_result">Verification result: <xliff:g>%s</xliff:g></string>
+	<string name="error_api">Error occurred when invoking crypto provider.</string>
+	<string name="error_connect">Error occurred when connecting to the crypto provider. This app requires the OpenKeychain app to function properly. Please make sure that OpenKeychain has been installed on your device.</string>
+	<string name="error_gpg_no_action">No supported action is found.</string>
+	<string name="error_option">Invalid option: <xliff:g>%s</xliff:g></string>
+	<string name="error_required_option">Required option \"<xliff:g>%s</xliff:g>\" is not found.</string>
 	<string name="msg_decryption_result">Decryption result: <xliff:g>%s</xliff:g></string>
 	<string name="msg_option_ignored">The option \"<xliff:g>%s</xliff:g>\" is not supported and thus ignored.</string>
+	<string name="msg_signature_from">Signature from: <xliff:g>%s</xliff:g></string>
+	<string name="msg_signature_result">Verification result: <xliff:g>%s</xliff:g></string>
+	<string name="notification_gpg_content">Serving GPG requests&#8230;</string>
+	<string name="notification_gpg_title">GPG Agent Service</string>
+	<string name="notification_ssh_content">Serving SSH agent requests&#8230;</string>
+	<string name="notification_ssh_title">SSH Agent Service</string>
+	<string name="text_error">Error</string>
+	<string name="text_has_gpg_key">GPG key selected.</string>
+	<string name="text_has_ssh_key">SSH key selected.</string>
+	<string name="text_no_gpg_key">No valid GPG key selected.</string>
+	<string name="text_no_provider">The OpenKeychain app, which this app relies upon, is not installed on this device. You need to install OpenKeychain before being able to use this app.</string>
+	<string name="text_no_ssh_key">No valid SSH key selected.</string>
+	<string name="text_waiting_provider">Waiting for crypto provider&#8230;</string>
+	<string name="text_warning">Warning</string>
+
+	<string name="key_gpg_key" translatable="false">GPG_KEY_ID</string>
+	<string name="key_ssh_key" translatable="false">SSH_KEY_ID</string>
+	<string name="pref_main" translatable="false">MAIN_PREFERENCES</string>
+	<string name="provider_package_id" translatable="false">org.sufficientlysecure.keychain</string>
 </resources>
