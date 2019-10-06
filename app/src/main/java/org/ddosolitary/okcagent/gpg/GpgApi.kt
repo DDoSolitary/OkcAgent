@@ -9,7 +9,6 @@ import org.openintents.openpgp.util.OpenPgpServiceConnection
 import java.io.Closeable
 import java.io.InputStream
 import java.io.OutputStream
-import java.lang.Exception
 
 class GpgApi(
 	private val context: Context,
@@ -32,8 +31,8 @@ class GpgApi(
 		}).also { it.bindToService() }
 	}
 
-	fun executeApi(intent: Intent, input: InputStream?, output: OutputStream?): Intent?
-		= api?.executeApi(intent, input, output)
+	fun executeApi(intent: Intent, input: InputStream?, output: OutputStream?): Intent? =
+		api?.executeApi(intent, input, output)
 
 	override fun close() {
 		conn?.let {
