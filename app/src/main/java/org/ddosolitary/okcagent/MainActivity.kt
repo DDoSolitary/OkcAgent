@@ -79,30 +79,6 @@ class MainActivity : Activity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
-		var found = true
-		try {
-			packageManager.getPackageInfo(getString(R.string.provider_package_id), 0)
-		} catch (_: Exception) {
-			found = false
-		}
-		if (found) {
-			sshApi = SshApi(this) {
-				if (!it) {
-					close()
-					showError(this@MainActivity, R.string.error_connect)
-				}
-			}.also { it.connect() }
-			gpgApi = GpgApi(this) {
-				if (!it) {
-					close()
-					showError(this@MainActivity, R.string.error_connect)
-				}
-			}.also { it.connect() }
-		} else {
-			findViewById<Button>(R.id.button_ssh_key).isEnabled = false
-			findViewById<Button>(R.id.button_gpg_key).isEnabled = false
-			findViewById<Button>(R.id.layout_no_provider).visibility = View.VISIBLE
-		}
 		findViewById<TextView>(R.id.text_ssh_key).setText(
 			if (pref.getString(getString(R.string.key_ssh_key), null) == null) {
 				R.string.text_no_ssh_key
@@ -117,6 +93,38 @@ class MainActivity : Activity() {
 				R.string.text_has_gpg_key
 			}
 		)
+	}
+
+	override fun onResume() {
+		super.onResume()
+		var found = true
+		try {
+			packageManager.getPackageInfo(getString(R.string.provider_package_id), 0)
+		} catch (_: Exception) {
+			found = false
+		}
+		if (found) {
+			if (sshApi == null) {
+				sshApi = SshApi(this) {
+					if (!it) {
+						close()
+						showError(this@MainActivity, R.string.error_connect)
+					}
+				}.also { it.connect() }
+			}
+			if (gpgApi == null) {
+				gpgApi = GpgApi(this) {
+					if (!it) {
+						close()
+						showError(this@MainActivity, R.string.error_connect)
+					}
+				}.also { it.connect() }
+			}
+		}
+		findViewById<Button>(R.id.button_ssh_key).isEnabled = found
+		findViewById<Button>(R.id.button_gpg_key).isEnabled = found
+		findViewById<View>(R.id.layout_no_provider).visibility =
+			if (found) View.GONE else View.VISIBLE
 	}
 
 	override fun onDestroy() {
