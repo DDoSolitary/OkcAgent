@@ -2,6 +2,7 @@ package org.ddosolitary.okcagent
 
 import android.app.Activity
 import android.app.PendingIntent
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -9,7 +10,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import java.lang.Exception
 import org.openintents.openpgp.OpenPgpError
 import org.openintents.openpgp.util.OpenPgpApi.*
 import org.openintents.ssh.authentication.request.KeySelectionRequest
@@ -157,6 +157,10 @@ class MainActivity : Activity() {
 
 	fun installProvider(@Suppress("UNUSED_PARAMETER") view: View) {
 		val uri = "market://details?id=%s".format(getString(R.string.provider_package_id))
-		startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
+		try {
+			startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
+		} catch (_: ActivityNotFoundException) {
+			// Prevent the app from crashing when Play Store isn't installed.
+		}
 	}
 }
