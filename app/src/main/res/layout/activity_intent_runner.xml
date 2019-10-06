@@ -2,18 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	android:padding="16dp">
+	android:padding="@dimen/padding">
 
 	<ProgressBar
 		android:id="@+id/progress_bar"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_margin="8dp" />
+		android:layout_margin="@dimen/margin" />
 
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="match_parent"
 		android:gravity="center_vertical"
-		android:layout_margin="8dp"
+		android:layout_margin="@dimen/margin"
 		android:text="@string/text_waiting_provider" />
 </LinearLayout>

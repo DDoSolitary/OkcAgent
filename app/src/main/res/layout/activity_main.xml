@@ -4,20 +4,20 @@
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:padding="16dp"
+	android:padding="@dimen/padding"
 	tools:context=".MainActivity">
 
 	<TextView
 		android:id="@+id/text_ssh_key"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_margin="8dp" />
+		android:layout_margin="@dimen/margin" />
 
 	<Button
 		android:id="@+id/button_ssh_key"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_margin="8dp"
+		android:layout_margin="@dimen/margin"
 		android:onClick="selectSshKey"
 		android:text="@string/button_select_key" />
 
@@ -25,13 +25,13 @@
 		android:id="@+id/text_gpg_key"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_margin="8dp" />
+		android:layout_margin="@dimen/margin" />
 
 	<Button
 		android:id="@+id/button_gpg_key"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_margin="8dp"
+		android:layout_margin="@dimen/margin"
 		android:onClick="selectGpgKey"
 		android:text="@string/button_select_key" />
 
@@ -44,14 +44,14 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_margin="8dp"
+			android:layout_margin="@dimen/margin"
 			android:text="@string/text_no_provider"
 			android:textColor="@android:color/holo_red_light" />
 
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_margin="8dp"
+			android:layout_margin="@dimen/margin"
 			android:text="@string/button_install"
 			android:onClick="installProvider" />
 	</LinearLayout>

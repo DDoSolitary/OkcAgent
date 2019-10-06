@@ -3,19 +3,19 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:padding="16dp">
+	android:padding="@dimen/padding">
 
 	<TextView
 		android:id="@+id/text_error"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_margin="8dp"
+		android:layout_margin="@dimen/margin"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_margin="8dp"
+		android:layout_margin="@dimen/margin"
 		android:text="@string/button_ok"
 		android:onClick="onClickOk"
 		app:layout_constraintEnd_toEndOf="parent"
