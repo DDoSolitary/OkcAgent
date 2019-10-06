@@ -34,7 +34,7 @@ This project consists of two components: the OkcAgent app, and command line util
 
 1. Install OpenKeychain, Termux and the necessary components mentioned above.
 2. Open the app and configure the keys to be used for crypto operations.
-3. Use the command line utlilities.
+3. Use the command line utilities.
     - `okc-ssh-agent` acts as an SSH agent. You can specify path of the agent socket with its first argument, and set `SSH_AUTH_SOCK` to that path to inform programs like `ssh` to connect to it.
     - `okc-gpg` supports a limited set of GPG options so you can use it to perform some crypto operations. Read [GpgArguments.kt](https://github.com/DDoSolitary/OkcAgent/blob/master/app/src/main/java/org/ddosolitary/okcagent/GpgArguments.kt) for a complete list of supported options.
 
