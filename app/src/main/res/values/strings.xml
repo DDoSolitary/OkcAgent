@@ -25,9 +25,4 @@
 	<string name="text_no_ssh_key">No valid SSH key selected.</string>
 	<string name="text_waiting_provider">Waiting for crypto provider&#8230;</string>
 	<string name="text_warning">Warning</string>
-
-	<string name="key_gpg_key" translatable="false">GPG_KEY_ID</string>
-	<string name="key_ssh_key" translatable="false">SSH_KEY_ID</string>
-	<string name="pref_main" translatable="false">MAIN_PREFERENCES</string>
-	<string name="provider_package_id" translatable="false">org.sufficientlysecure.keychain</string>
 </resources>

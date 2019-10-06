@@ -4,7 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.util.Base64
 import androidx.core.app.NotificationCompat
-import org.ddosolitary.okcagent.*
+import org.ddosolitary.okcagent.AgentService
+import org.ddosolitary.okcagent.R
+import org.ddosolitary.okcagent.showError
+import org.ddosolitary.okcagent.writeString
 import org.openintents.openpgp.OpenPgpDecryptionResult
 import org.openintents.openpgp.OpenPgpError
 import org.openintents.openpgp.OpenPgpSignatureResult
@@ -13,7 +16,6 @@ import java.io.OutputStream
 import java.net.Socket
 
 const val EXTRA_GPG_ARGS = "org.ddosolitary.okcagent.extra.GPG_ARGS"
-private const val NOTIFICATION_ID_GPG = 2
 
 class GpgAgentService : AgentService() {
 	private fun handleSigResult(res: OpenPgpSignatureResult, output: OutputStream): Boolean {
@@ -226,11 +228,11 @@ class GpgAgentService : AgentService() {
 
 	override fun onCreate() {
 		super.onCreate()
-		val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_SERVICE)
+		val notification = NotificationCompat.Builder(this, getString(R.string.channel_id_service))
 			.setSmallIcon(R.mipmap.ic_launcher)
 			.setContentTitle(getString(R.string.notification_gpg_title))
 			.setContentText(getString(R.string.notification_gpg_content))
 			.build()
-		startForeground(NOTIFICATION_ID_GPG, notification)
+		startForeground(resources.getInteger(R.integer.notification_id_gpg), notification)
 	}
 }

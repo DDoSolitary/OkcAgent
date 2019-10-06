@@ -1,8 +1,12 @@
 package org.ddosolitary.okcagent
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import java.util.concurrent.ArrayBlockingQueue
@@ -77,7 +81,15 @@ abstract class AgentService : Service() {
 
 	override fun onCreate() {
 		super.onCreate()
-		createNotificationChannel(this)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			val channel = NotificationChannel(
+				getString(R.string.channel_id_service),
+				this.getString(R.string.channel_service),
+				NotificationManager.IMPORTANCE_MIN
+			)
+			(this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+				.createNotificationChannel(channel)
+		}
 	}
 
 	override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {

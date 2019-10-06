@@ -5,7 +5,6 @@ import android.content.Intent
 import android.util.Base64
 import androidx.core.app.NotificationCompat
 import org.ddosolitary.okcagent.AgentService
-import org.ddosolitary.okcagent.NOTIFICATION_CHANNEL_SERVICE
 import org.ddosolitary.okcagent.R
 import org.ddosolitary.okcagent.showError
 import org.openintents.ssh.authentication.SshAuthenticationApi.EXTRA_ERROR
@@ -15,8 +14,6 @@ import org.openintents.ssh.authentication.request.SshPublicKeyRequest
 import org.openintents.ssh.authentication.response.SigningResponse
 import org.openintents.ssh.authentication.response.SshPublicKeyResponse
 import java.net.Socket
-
-private const val NOTIFICATION_ID_SSH = 1
 
 class SshAgentService : AgentService() {
 	override fun getErrorMessage(intent: Intent): String? {
@@ -90,11 +87,11 @@ class SshAgentService : AgentService() {
 
 	override fun onCreate() {
 		super.onCreate()
-		val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_SERVICE)
+		val notification = NotificationCompat.Builder(this, getString(R.string.channel_id_service))
 			.setSmallIcon(R.mipmap.ic_launcher)
 			.setContentTitle(getString(R.string.notification_ssh_title))
 			.setContentText(getString(R.string.notification_ssh_content))
 			.build()
-		startForeground(NOTIFICATION_ID_SSH, notification)
+		startForeground(resources.getInteger(R.integer.notification_id_ssh), notification)
 	}
 }

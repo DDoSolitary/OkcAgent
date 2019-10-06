@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="key_gpg_key" translatable="false">GPG_KEY_ID</string>
+	<string name="key_ssh_key" translatable="false">SSH_KEY_ID</string>
+	<string name="channel_id_service">NOTIFICATION_CHANNEL_SERVICE</string>
+	<integer name="notification_id_ssh">1</integer>
+	<integer name="notification_id_gpg">2</integer>
+	<string name="pref_main" translatable="false">MAIN_PREFERENCES</string>
+	<string name="provider_package_id" translatable="false">org.sufficientlysecure.keychain</string>
+</resources>
