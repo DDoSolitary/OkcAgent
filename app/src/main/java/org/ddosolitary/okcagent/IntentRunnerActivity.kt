@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 
@@ -14,7 +14,7 @@ const val EXTRA_API_INTENT = "org.ddosolitary.okcagent.extra.API_INTENT"
 const val EXTRA_CALLBACK_INTENT = "org.ddosolitary.okcagent.extra.CALLBACK_INTENT"
 const val EXTRA_RESULT_INTENT = "org.ddosolitary.okcagent.extra.RESULT_INTENT"
 
-class IntentRunnerActivity : FragmentActivity() {
+class IntentRunnerActivity : AppCompatActivity() {
 	class RequestsViewModel : ViewModel() {
 		var requestCode = 0
 		val requestMap = mutableMapOf<Int, Intent>()

@@ -1,58 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:padding="@dimen/padding"
-	tools:context=".MainActivity">
-
-	<TextView
-		android:id="@+id/text_ssh_key"
-		android:layout_width="wrap_content"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+	<com.google.android.material.appbar.AppBarLayout
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_margin="@dimen/margin" />
-
-	<Button
-		android:id="@+id/button_ssh_key"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_margin="@dimen/margin"
-		android:onClick="selectSshKey"
-		android:text="@string/button_select_key" />
-
-	<TextView
-		android:id="@+id/text_gpg_key"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_margin="@dimen/margin" />
-
-	<Button
-		android:id="@+id/button_gpg_key"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_margin="@dimen/margin"
-		android:onClick="selectGpgKey"
-		android:text="@string/button_select_key" />
-
+		android:theme="@style/AppTheme.AppBarOverlay">
+		<com.google.android.material.appbar.MaterialToolbar
+			android:id="@+id/toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:layout_scrollFlags="enterAlways" />
+	</com.google.android.material.appbar.AppBarLayout>
 	<LinearLayout
-		android:id="@+id/layout_no_provider"
 		android:orientation="vertical"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="match_parent"
+		android:padding="@dimen/padding"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		tools:context=".MainActivity">
 
 		<TextView
+			android:id="@+id/text_ssh_key"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_margin="@dimen/margin"
-			android:text="@string/text_no_provider"
-			android:textColor="@android:color/holo_red_light" />
+			android:layout_margin="@dimen/margin" />
 
-		<Button
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/button_ssh_key"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_margin="@dimen/margin"
-			android:text="@string/button_install"
-			android:onClick="installProvider" />
+			android:onClick="selectSshKey"
+			android:text="@string/button_select_key" />
+
+		<TextView
+			android:id="@+id/text_gpg_key"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="@dimen/margin" />
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/button_gpg_key"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="@dimen/margin"
+			android:onClick="selectGpgKey"
+			android:text="@string/button_select_key" />
+
+		<LinearLayout
+			android:id="@+id/layout_no_provider"
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_margin="@dimen/margin"
+				android:text="@string/text_no_provider"
+				android:textColor="@android:color/holo_red_light" />
+
+			<com.google.android.material.button.MaterialButton
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_margin="@dimen/margin"
+				android:text="@string/button_install"
+				android:onClick="installProvider" />
+		</LinearLayout>
 	</LinearLayout>
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

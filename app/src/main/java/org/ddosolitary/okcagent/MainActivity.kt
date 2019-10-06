@@ -1,6 +1,5 @@
 package org.ddosolitary.okcagent
 
-import android.app.Activity
 import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -10,6 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import org.ddosolitary.okcagent.gpg.GpgApi
 import org.ddosolitary.okcagent.ssh.SshApi
 import org.openintents.openpgp.OpenPgpError
@@ -21,7 +21,7 @@ import org.openintents.ssh.authentication.response.KeySelectionResponse
 private const val REQUEST_SELECT_SSH_KEY = 1
 private const val REQUEST_SELECT_GPG_KEY = 2
 
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity() {
 	private val pref by lazy {
 		getSharedPreferences(getString(R.string.pref_main), Context.MODE_PRIVATE)
 	}
@@ -81,6 +81,7 @@ class MainActivity : Activity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
+		setSupportActionBar(findViewById(R.id.toolbar))
 		findViewById<TextView>(R.id.text_ssh_key).setText(
 			if (pref.getString(getString(R.string.key_ssh_key), null) == null) {
 				R.string.text_no_ssh_key

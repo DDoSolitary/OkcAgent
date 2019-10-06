@@ -1,13 +1,13 @@
 package org.ddosolitary.okcagent
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
 const val EXTRA_ERROR_MESSAGE = "org.ddosolitary.okcagent.extra.ERROR_MESSAGE"
 
-class ErrorDialogActivity : Activity() {
+class ErrorDialogActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_error_dialog)
