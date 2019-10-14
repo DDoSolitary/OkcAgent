@@ -233,6 +233,7 @@ class GpgAgentService : AgentService() {
 	override fun onCreate() {
 		super.onCreate()
 		val notification = NotificationCompat.Builder(this, getString(R.string.channel_id_service))
+			.setPriority(NotificationCompat.PRIORITY_MIN)
 			.setSmallIcon(R.drawable.ic_key)
 			.setContentTitle(getString(R.string.notification_gpg_title))
 			.setContentText(getString(R.string.notification_gpg_content))
