@@ -3,6 +3,7 @@ package org.ddosolitary.okcagent.gpg
 import android.content.Context
 import android.content.Intent
 import android.util.Base64
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.crashlytics.android.Crashlytics
 import org.ddosolitary.okcagent.AgentService
@@ -217,6 +218,7 @@ class GpgAgentService : AgentService() {
 			}
 		} catch (e: Exception) {
 			Crashlytics.logException(e)
+			Log.e(null, Log.getStackTraceString(e))
 			success = false
 			controlOutput?.let {
 				writeString(it, "Error: %s".format(e.message))
