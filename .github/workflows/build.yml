@@ -5,7 +5,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - run: |
-          sudo $ANDROID_SDK_ROOT/../tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "build-tools;30.0.1" "platforms;android-30"
+          sudo $ANDROID_SDK_ROOT/tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "build-tools;30.0.1" "platforms;android-30"
           ./gradlew assembledebug
           curl -fsS -T app/build/outputs/apk/debug/app-debug.apk -u ddosolitary:${{ secrets.BINTRAY_KEY }} https://api.bintray.com/content/ddosolitary/dev-releases/default/default/OkcAgent/OkcAgent-r$(git rev-list --count HEAD).apk
           curl -fsS -X POST -u ddosolitary:${{ secrets.BINTRAY_KEY }} https://api.bintray.com/content/ddosolitary/dev-releases/default/default/publish
