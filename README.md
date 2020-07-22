@@ -24,7 +24,7 @@ This project consists of two components: the OkcAgent app, and command line util
 
 ### The OkcAgent app
 
-[Dev releases](https://dl.bintray.com/ddosolitary/dev-releases/OkcAgent/) or [Play Store](https://play.google.com/store/apps/details?id=org.ddosolitary.okcagent)
+[Dev releases](https://dl.bintray.com/ddosolitary/dev-releases/OkcAgent/) or [Play Store](https://play.google.com/store/apps/details?id=org.ddosolitary.okcagent) or [F-Droid](https://f-droid.org/packages/org.ddosolitary.okcagent/)
 
 ### Command line utilities
 
