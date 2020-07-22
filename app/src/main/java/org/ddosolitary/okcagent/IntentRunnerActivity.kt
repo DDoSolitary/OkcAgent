@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 
 const val ACTION_RUN_PENDING_INTENT = "org.ddosolitary.okcagent.action.RUN_PENDING_INTENT"
 const val ACTION_FINISH = "org.ddosolitary.okcagent.action.FINISH"
@@ -20,7 +20,7 @@ class IntentRunnerActivity : AppCompatActivity() {
 		val requestMap = mutableMapOf<Int, Intent>()
 	}
 
-	private val vm by lazy { ViewModelProviders.of(this)[RequestsViewModel::class.java] }
+	private val vm by lazy { ViewModelProvider(this)[RequestsViewModel::class.java] }
 
 	private fun processIntent(intent: Intent) {
 		when (intent.action) {
