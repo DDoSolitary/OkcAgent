@@ -5,7 +5,7 @@ import android.content.Intent
 import android.util.Base64
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import org.ddosolitary.okcagent.AgentService
 import org.ddosolitary.okcagent.R
 import org.ddosolitary.okcagent.showError
@@ -217,7 +217,7 @@ class GpgAgentService : AgentService() {
 				}
 			}
 		} catch (e: Exception) {
-			Crashlytics.logException(e)
+			FirebaseCrashlytics.getInstance().recordException(e)
 			Log.e(null, Log.getStackTraceString(e))
 			success = false
 			controlOutput?.let {
