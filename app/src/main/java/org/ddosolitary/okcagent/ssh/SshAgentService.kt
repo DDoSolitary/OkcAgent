@@ -16,6 +16,7 @@ import org.openintents.ssh.authentication.request.SshPublicKeyRequest
 import org.openintents.ssh.authentication.response.SigningResponse
 import org.openintents.ssh.authentication.response.SshPublicKeyResponse
 import java.net.Socket
+import java.util.concurrent.Semaphore
 
 class SshAgentService : AgentService() {
 	override fun getErrorMessage(intent: Intent): String? {
@@ -30,15 +31,15 @@ class SshAgentService : AgentService() {
 			val output = socket.getOutputStream()
 			val keyId = getSharedPreferences(getString(R.string.pref_main), Context.MODE_PRIVATE)
 				.getString(getString(R.string.key_ssh_key), "") ?: ""
-			val lock = Object()
+			val lock = Semaphore(0)
 			var connRes = false
 			SshApi(this) { res ->
 				if (!res) showError(this@SshAgentService, R.string.error_connect)
 				connRes = res
-				synchronized(lock) { lock.notify() }
+				lock.release()
 			}.use { api ->
 				api.connect()
-				synchronized(lock) { lock.wait() }
+				lock.acquire()
 				check(connRes)
 				val executeApi = { reqIntent: Intent -> api.executeApi(reqIntent) }
 				while (true) {

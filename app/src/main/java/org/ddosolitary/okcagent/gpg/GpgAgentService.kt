@@ -16,6 +16,7 @@ import org.openintents.openpgp.OpenPgpSignatureResult
 import org.openintents.openpgp.util.OpenPgpApi.*
 import java.io.OutputStream
 import java.net.Socket
+import java.util.concurrent.Semaphore;
 
 const val EXTRA_GPG_ARGS = "org.ddosolitary.okcagent.extra.GPG_ARGS"
 
@@ -74,15 +75,15 @@ class GpgAgentService : AgentService() {
 					this
 				).use { output ->
 					val wrappedOutput = output.getAutoReopenStream()
-					val lock = Object()
+					val lock = Semaphore(0)
 					var connRes = false
 					GpgApi(this) { res ->
 						if (!res) showError(this@GpgAgentService, R.string.error_connect)
 						connRes = res
-						synchronized(lock) { lock.notify() }
+						lock.release()
 					}.use { api ->
 						api.connect()
-						synchronized(lock) { lock.wait() }
+						lock.acquire()
 						check(connRes)
 						val reqIntent = Intent()
 						reqIntent.putExtra(
