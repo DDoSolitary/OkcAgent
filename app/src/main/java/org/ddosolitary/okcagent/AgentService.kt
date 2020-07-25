@@ -1,14 +1,12 @@
 package org.ddosolitary.okcagent
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
+import androidx.core.app.NotificationCompat
 import java.util.concurrent.ArrayBlockingQueue
 import kotlin.concurrent.thread
 
@@ -18,18 +16,18 @@ const val EXTRA_PROXY_PORT = "org.ddosolitary.okcagent.extra.PROXY_PORT"
 const val RESULT_CODE_ERROR = 0
 const val RESULT_CODE_SUCCESS = 1
 const val RESULT_CODE_USER_INTERACTION_REQUIRED = 2
+private const val ACTION_TERMINATE_SERVICE = "org.ddosolitary.okcagent.action.TERMINATE_SERVICE"
 private const val EXTRA_RESULT_CODE = "result_code"
 private const val EXTRA_PENDING_INTENT = "intent"
 
 abstract class AgentService : Service() {
 	private class ThreadContext(val thread: Thread, val queue: ArrayBlockingQueue<Intent?>)
 
-	private var lastStartId = -1
 	private val threadMap = mutableMapOf<Int, ThreadContext>()
 	private var exited = false
 
 	private fun checkServiceExit() {
-		if (threadMap.isEmpty()) stopSelf(lastStartId)
+		if (threadMap.isEmpty()) stopSelf()
 	}
 
 	protected fun checkThreadExit(port: Int) {
@@ -77,6 +75,18 @@ abstract class AgentService : Service() {
 		}
 	}
 
+	protected fun buildServiceNotification(title: Int, text: Int): Notification {
+		val intent = Intent(this, this.javaClass).apply { action = ACTION_TERMINATE_SERVICE }
+		val pi = PendingIntent.getService(this, 0, intent, 0)
+		return NotificationCompat.Builder(this, getString(R.string.channel_id_service))
+			.setPriority(NotificationCompat.PRIORITY_MIN)
+			.setSmallIcon(R.drawable.ic_key)
+			.setContentTitle(getString(title))
+			.setContentText(getString(text))
+			.addAction(R.drawable.ic_stop, getString(R.string.text_terminate), pi)
+			.build()
+	}
+
 	override fun onBind(intent: Intent): IBinder? = null
 
 	override fun onCreate() {
@@ -105,8 +115,8 @@ abstract class AgentService : Service() {
 			}
 			ACTION_RESULT_CALLBACK -> threadMap[port]?.queue
 				?.put(intent.getParcelableExtra(EXTRA_RESULT_INTENT)) ?: checkServiceExit()
+			ACTION_TERMINATE_SERVICE -> stopSelf()
 		}
-		lastStartId = startId
 		return START_NOT_STICKY
 	}
 

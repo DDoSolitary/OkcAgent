@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.util.Base64
 import android.util.Log
-import androidx.core.app.NotificationCompat
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import org.ddosolitary.okcagent.AgentService
 import org.ddosolitary.okcagent.R
@@ -242,12 +241,9 @@ class GpgAgentService : AgentService() {
 
 	override fun onCreate() {
 		super.onCreate()
-		val notification = NotificationCompat.Builder(this, getString(R.string.channel_id_service))
-			.setPriority(NotificationCompat.PRIORITY_MIN)
-			.setSmallIcon(R.drawable.ic_key)
-			.setContentTitle(getString(R.string.notification_gpg_title))
-			.setContentText(getString(R.string.notification_gpg_content))
-			.build()
-		startForeground(resources.getInteger(R.integer.notification_id_gpg), notification)
+		startForeground(
+			resources.getInteger(R.integer.notification_id_gpg),
+			buildServiceNotification(R.string.notification_gpg_title, R.string.notification_gpg_content)
+		)
 	}
 }

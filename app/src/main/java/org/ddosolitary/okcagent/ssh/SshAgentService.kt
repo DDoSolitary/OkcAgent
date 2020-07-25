@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.util.Base64
 import android.util.Log
-import androidx.core.app.NotificationCompat
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import org.ddosolitary.okcagent.AgentService
 import org.ddosolitary.okcagent.R
@@ -102,12 +101,9 @@ class SshAgentService : AgentService() {
 
 	override fun onCreate() {
 		super.onCreate()
-		val notification = NotificationCompat.Builder(this, getString(R.string.channel_id_service))
-			.setPriority(NotificationCompat.PRIORITY_MIN)
-			.setSmallIcon(R.drawable.ic_key)
-			.setContentTitle(getString(R.string.notification_ssh_title))
-			.setContentText(getString(R.string.notification_ssh_content))
-			.build()
-		startForeground(resources.getInteger(R.integer.notification_id_ssh), notification)
+		startForeground(
+			resources.getInteger(R.integer.notification_id_ssh),
+			buildServiceNotification(R.string.notification_ssh_title, R.string.notification_ssh_content)
+		)
 	}
 }

@@ -23,5 +23,6 @@
 	<string name="text_no_gpg_key">No valid GPG key selected.</string>
 	<string name="text_no_provider">The OpenKeychain app, which this app relies upon, is not installed on this device. You need to install OpenKeychain before being able to use this app.</string>
 	<string name="text_no_ssh_key">No valid SSH key selected.</string>
+	<string name="text_terminate">Terminate</string>
 	<string name="text_waiting_provider">Waiting for crypto provider&#8230;</string>
 </resources>
