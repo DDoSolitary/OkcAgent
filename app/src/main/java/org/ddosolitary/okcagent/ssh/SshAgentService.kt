@@ -85,9 +85,17 @@ class SshAgentService : AgentService() {
 		} catch (e: Exception) {
 			FirebaseCrashlytics.getInstance().recordException(e)
 			Log.e(LOG_TAG, Log.getStackTraceString(e))
-			socket?.setSoLinger(true, 0)
+			try {
+				socket?.setSoLinger(true, 0)
+			} catch (e: Exception) {
+				Log.w(LOG_TAG, "Failed to set linger option on exception: %s".format(e.printStackTrace()))
+			}
 		} finally {
-			socket?.close()
+			try {
+				socket?.close()
+			} catch (e: Exception) {
+				Log.w(LOG_TAG, "Failed to close the socket on exit: %s".format(e.printStackTrace()))
+			}
 			checkThreadExit(port)
 		}
 	}

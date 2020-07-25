@@ -222,12 +222,20 @@ class GpgAgentService : AgentService() {
 			FirebaseCrashlytics.getInstance().recordException(e)
 			Log.e(LOG_TAG, Log.getStackTraceString(e))
 			success = false
-			controlOutput?.let {
-				writeString(it, "[E] %s".format(e.message))
+			try {
+				controlOutput?.let {
+					writeString(it, "[E] %s".format(e.message))
+				}
+			} catch (e: Exception) {
+				Log.w(LOG_TAG, "Failed to send error message for the exception: %s".format(e.printStackTrace()))
 			}
 		} finally {
-			controlOutput?.write(byteArrayOf(0, 0, if (success) 0 else 1))
-			controlSocket?.close()
+			try {
+				controlOutput?.write(byteArrayOf(0, 0, if (success) 0 else 1))
+				controlSocket?.close()
+			} catch (e: Exception) {
+				Log.w(LOG_TAG, "Failed to send status code on exit: %s".format(e.printStackTrace()))
+			}
 			checkThreadExit(port)
 		}
 	}
