@@ -18,6 +18,8 @@ import org.openintents.ssh.authentication.response.SshPublicKeyResponse
 import java.net.Socket
 import java.util.concurrent.Semaphore
 
+private const val LOG_TAG = "SshAgentService"
+
 class SshAgentService : AgentService() {
 	override fun getErrorMessage(intent: Intent): String? {
 		return intent.getParcelableExtra<SshAuthenticationApiError>(EXTRA_ERROR)?.message
@@ -82,7 +84,7 @@ class SshAgentService : AgentService() {
 			}
 		} catch (e: Exception) {
 			FirebaseCrashlytics.getInstance().recordException(e)
-			Log.e(null, Log.getStackTraceString(e))
+			Log.e(LOG_TAG, Log.getStackTraceString(e))
 			socket?.setSoLinger(true, 0)
 		} finally {
 			socket?.close()

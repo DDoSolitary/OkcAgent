@@ -19,6 +19,7 @@ import java.net.Socket
 import java.util.concurrent.Semaphore;
 
 const val EXTRA_GPG_ARGS = "org.ddosolitary.okcagent.extra.GPG_ARGS"
+private const val LOG_TAG = "GpgAgentService"
 
 class GpgAgentService : AgentService() {
 	private fun handleSigResult(res: OpenPgpSignatureResult, output: OutputStream): Boolean {
@@ -219,7 +220,7 @@ class GpgAgentService : AgentService() {
 			}
 		} catch (e: Exception) {
 			FirebaseCrashlytics.getInstance().recordException(e)
-			Log.e(null, Log.getStackTraceString(e))
+			Log.e(LOG_TAG, Log.getStackTraceString(e))
 			success = false
 			controlOutput?.let {
 				writeString(it, "[E] %s".format(e.message))
