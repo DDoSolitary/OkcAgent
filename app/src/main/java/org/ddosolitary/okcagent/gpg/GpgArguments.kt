@@ -51,8 +51,7 @@ class GpgArguments(
 			for (s in args) {
 				val checkSupported = { name: String, option: OptionInfo ->
 					if (option.notSupported) {
-						val msg = context.getString(R.string.msg_option_ignored).format(name)
-						warnings.add("%s: %s".format(context.getString(R.string.text_warning), msg))
+						warnings.add(context.getString(R.string.msg_option_ignored).format(name))
 					}
 				}
 				if (pendingArg != null) {

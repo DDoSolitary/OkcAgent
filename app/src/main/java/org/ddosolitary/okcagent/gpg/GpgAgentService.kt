@@ -222,7 +222,7 @@ class GpgAgentService : AgentService() {
 			Log.e(null, Log.getStackTraceString(e))
 			success = false
 			controlOutput?.let {
-				writeString(it, "Error: %s".format(e.message))
+				writeString(it, "[E] %s".format(e.message))
 			}
 		} finally {
 			controlOutput?.write(byteArrayOf(0, 0, if (success) 0 else 1))
