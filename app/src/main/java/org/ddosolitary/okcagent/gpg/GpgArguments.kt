@@ -40,10 +40,13 @@ class GpgArguments(
 			throw Exception(context.getString(R.string.error_option).format(name))
 		}
 
-		fun parse(context: Context, args: Collection<String>): GpgArguments {
+		fun parse(context: Context, args: Collection<String>?): GpgArguments {
 			val options = mutableMapOf<String, String?>()
 			val arguments = mutableListOf<String>()
 			val warnings = mutableListOf<String>()
+			if (args == null) {
+				return GpgArguments(options, arguments, warnings)
+			}
 			var pendingArg: String? = null
 			for (s in args) {
 				val checkSupported = { name: String, option: OptionInfo ->

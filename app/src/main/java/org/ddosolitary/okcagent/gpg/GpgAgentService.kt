@@ -53,8 +53,8 @@ class GpgAgentService : AgentService() {
 			controlOutput = controlSocket.getOutputStream().also { it.write(0) }
 			val args = GpgArguments.parse(
 				this,
-				intent.getStringArrayExtra(EXTRA_GPG_ARGS)!!
-					.map { Base64.decode(it, Base64.DEFAULT).toString(Charsets.UTF_8) }
+				intent.getStringArrayExtra(EXTRA_GPG_ARGS)
+					?.map { Base64.decode(it, Base64.DEFAULT).toString(Charsets.UTF_8) }
 			)
 			for (msg in args.warnings) {
 				writeString(controlOutput, msg)
