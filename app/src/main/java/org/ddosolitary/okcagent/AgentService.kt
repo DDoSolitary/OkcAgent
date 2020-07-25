@@ -117,10 +117,10 @@ abstract class AgentService : Service() {
 			action = ACTION_FINISH
 		})
 		for ((_, ctx) in threadMap) {
-			ctx.thread.apply {
-				interrupt()
-				join()
-			}
+			ctx.thread.interrupt()
+		}
+		for ((_, ctx) in threadMap) {
+			ctx.thread.join(3000)
 		}
 		super.onDestroy()
 	}
