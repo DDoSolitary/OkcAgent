@@ -8,7 +8,10 @@
 		<item name="colorPrimaryDark">#00574B</item>
 	</style>
 
-	<style name="AppTheme.Dialog" parent="Theme.MaterialComponents.Light.Dialog" />
+	<style name="AppTheme.Dialog" parent="Theme.MaterialComponents.Light.Dialog">
+		<item name="android:windowMinWidthMajor">100%</item>
+		<item name="android:windowMinWidthMinor">100%</item>
+	</style>
 
 	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 </resources>
