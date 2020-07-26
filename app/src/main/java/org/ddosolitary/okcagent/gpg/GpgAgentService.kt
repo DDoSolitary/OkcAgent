@@ -64,16 +64,13 @@ class GpgAgentService : AgentService() {
 				.getLong(getString(R.string.key_gpg_key), -1)
 			GpgInputWrapper(
 				port,
-				if (args.arguments.isNotEmpty()) args.arguments.last() else "-",
-				this
+				if (args.arguments.isNotEmpty()) args.arguments.last() else "-"
 			).use { input ->
 				val wrappedInput = input.getAutoReopenStream()
 				GpgOutputWrapper(
 					port,
-					args.options["output"] ?: "-",
-					this
+					args.options["output"] ?: "-"
 				).use { output ->
-					val wrappedOutput = output.getAutoReopenStream()
 					val lock = Semaphore(0)
 					var connRes = false
 					GpgApi(this) { res ->
@@ -100,7 +97,7 @@ class GpgAgentService : AgentService() {
 								reqIntent.action = ACTION_CLEARTEXT_SIGN
 								reqIntent.putExtra(EXTRA_SIGN_KEY_ID, keyId)
 								val resIntent = callApi(
-									{ api.executeApi(it, wrappedInput, wrappedOutput) },
+									{ api.executeApi(it, wrappedInput, output) },
 									reqIntent, port
 								)
 								if (resIntent == null) {
@@ -138,7 +135,7 @@ class GpgAgentService : AgentService() {
 									reqIntent.action = ACTION_ENCRYPT
 								}
 								val resIntent = callApi(
-									{ api.executeApi(it, wrappedInput, wrappedOutput) },
+									{ api.executeApi(it, wrappedInput, output) },
 									reqIntent, port
 								)
 								if (resIntent == null) {
@@ -162,7 +159,7 @@ class GpgAgentService : AgentService() {
 									}
 								}
 								val resIntent = callApi(
-									{ api.executeApi(it, wrappedInput, wrappedOutput) },
+									{ api.executeApi(it, wrappedInput, output) },
 									reqIntent, port
 								)
 								if (resIntent == null) {
@@ -179,7 +176,7 @@ class GpgAgentService : AgentService() {
 							args.options.containsKey("decrypt") -> {
 								reqIntent.action = ACTION_DECRYPT_VERIFY
 								val resIntent = callApi(
-									{ api.executeApi(it, wrappedInput, wrappedOutput) },
+									{ api.executeApi(it, wrappedInput, output) },
 									reqIntent, port
 								)
 								if (resIntent == null) {
@@ -222,7 +219,7 @@ class GpgAgentService : AgentService() {
 			success = false
 			try {
 				controlOutput?.let {
-					writeString(it, "[E] %s".format(e.message))
+					writeString(it, "[E] %s".format(e))
 				}
 			} catch (e: Exception) {
 				Log.w(LOG_TAG, "Failed to send error message for the exception: %s".format(e))
