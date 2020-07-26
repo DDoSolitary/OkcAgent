@@ -87,13 +87,13 @@ class SshAgentService : AgentService() {
 			try {
 				socket?.setSoLinger(true, 0)
 			} catch (e: Exception) {
-				Log.w(LOG_TAG, "Failed to set linger option on exception: %s".format(e.printStackTrace()))
+				Log.w(LOG_TAG, "Failed to set linger option on exception: %s".format(e))
 			}
 		} finally {
 			try {
 				socket?.close()
 			} catch (e: Exception) {
-				Log.w(LOG_TAG, "Failed to close the socket on exit: %s".format(e.printStackTrace()))
+				Log.w(LOG_TAG, "Failed to close the socket on exit: %s".format(e))
 			}
 			checkThreadExit(port)
 		}
