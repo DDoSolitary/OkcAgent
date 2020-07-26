@@ -71,7 +71,6 @@ class GpgAgentService : AgentService() {
 				GpgOutputWrapper(
 					port,
 					args.options["output"] ?: "-",
-					args.options.containsKey("armor"),
 					this
 				).use { output ->
 					val wrappedOutput = output.getAutoReopenStream()

@@ -33,7 +33,6 @@ abstract class OutputStreamWrapper : OutputStream() {
 class GpgOutputWrapper(
 	private val port: Int,
 	private val path: String,
-	private val translateLf: Boolean,
 	private val context: Context
 ) : OutputStreamWrapper() {
 	private var file: File? = null
@@ -46,32 +45,6 @@ class GpgOutputWrapper(
 			stream = file!!.outputStream()
 		}
 		return stream!!
-	}
-
-	override fun write(b: Int) {
-		write(byteArrayOf(b.toByte()), 0, 1)
-	}
-
-	override fun write(b: ByteArray) {
-		write(b, 0, b.size)
-	}
-
-	override fun write(b: ByteArray, off: Int, len: Int) {
-		if (len == 0) return
-		getWrappedStream().let {
-			if (translateLf) {
-				var last = off
-				for (i in off..off + len) {
-					if (i == off + len) {
-						if (last < i) it.write(b, last, i - last)
-					} else if (b[i] == '\n'.toByte()) {
-						if (last < i) it.write(b, last, i - last)
-						it.write(byteArrayOf('\r'.toByte(), '\n'.toByte()))
-						last = i + 1
-					}
-				}
-			} else it.write(b, off, len)
-		}
 	}
 
 	override fun close() {
