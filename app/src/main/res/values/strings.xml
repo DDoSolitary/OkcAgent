@@ -3,6 +3,7 @@
 	<string name="button_install">Install Now</string>
 	<string name="button_ok">OK</string>
 	<string name="button_select_key">Select Key</string>
+	<string name="channel_auth">Authorization requests</string>
 	<string name="channel_service">Agent services</string>
 	<string name="error_api">Error occurred when invoking crypto provider.</string>
 	<string name="error_connect">Error occurred when connecting to the crypto provider. This app requires the OpenKeychain app to function properly. Please make sure that OpenKeychain has been installed on your device.</string>
@@ -13,6 +14,8 @@
 	<string name="msg_option_ignored">[E] The option \"<xliff:g>%s</xliff:g>\" is not supported and thus ignored</string>
 	<string name="msg_signature_from">Signature from: <xliff:g>%s</xliff:g></string>
 	<string name="msg_signature_result">Verification result: <xliff:g>%s</xliff:g></string>
+	<string name="notification_auth_title">Authorization Required</string>
+	<string name="notification_auth_content">Click here to authorize your crypto operation.</string>
 	<string name="notification_gpg_content">Serving GPG requests&#8230;</string>
 	<string name="notification_gpg_title">GPG Agent Service</string>
 	<string name="notification_ssh_content">Serving SSH agent requests&#8230;</string>

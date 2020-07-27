@@ -51,7 +51,7 @@ abstract class AgentService : Service() {
 			when (resIntent.getIntExtra(EXTRA_RESULT_CODE, RESULT_CODE_ERROR)) {
 				RESULT_CODE_SUCCESS -> return resIntent
 				RESULT_CODE_USER_INTERACTION_REQUIRED -> {
-					startActivity(Intent(this, IntentRunnerActivity::class.java).apply {
+					val runnerIntent = Intent(this, IntentRunnerActivity::class.java).apply {
 						action = ACTION_RUN_PENDING_INTENT
 						flags = Intent.FLAG_ACTIVITY_NEW_TASK
 						putExtra(
@@ -65,7 +65,18 @@ abstract class AgentService : Service() {
 								putExtra(EXTRA_PROXY_PORT, port)
 							}
 						)
-					})
+					}
+					val pi = PendingIntent.getActivity(this, port, runnerIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+					val notification = NotificationCompat.Builder(this, getString(R.string.channel_id_auth))
+						.setPriority(NotificationCompat.PRIORITY_HIGH)
+						.setSmallIcon(R.drawable.ic_key)
+						.setContentText(getString(R.string.notification_auth_title))
+						.setContentText(getString(R.string.notification_auth_content))
+						.setAutoCancel(true)
+						.setOngoing(true)
+						.setContentIntent(pi)
+						.build()
+					(getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(port, notification)
 					reqIntent = threadMap[port]!!.queue.take().intent ?: return null
 				}
 				RESULT_CODE_ERROR -> {
@@ -93,13 +104,19 @@ abstract class AgentService : Service() {
 	override fun onCreate() {
 		super.onCreate()
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-			val channel = NotificationChannel(
+			val serviceChannel = NotificationChannel(
 				getString(R.string.channel_id_service),
-				this.getString(R.string.channel_service),
+				getString(R.string.channel_service),
 				NotificationManager.IMPORTANCE_MIN
 			)
-			(this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
-				.createNotificationChannel(channel)
+			val authChannel = NotificationChannel(
+				getString(R.string.channel_id_auth),
+				getString(R.string.channel_auth),
+				NotificationManager.IMPORTANCE_HIGH
+			);
+			val mgr = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+			mgr.createNotificationChannel(serviceChannel)
+			mgr.createNotificationChannel(authChannel)
 		}
 	}
 
