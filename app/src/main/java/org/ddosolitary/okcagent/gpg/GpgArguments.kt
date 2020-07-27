@@ -33,7 +33,8 @@ class GpgArguments(
 			OptionInfo("local-user", null, 'u', true, true),
 			OptionInfo("default-user", null, null, false, true),
 			OptionInfo("status-fd", null, null, true, false),
-			OptionInfo("keyid-format", null, null, true, true)
+			OptionInfo("keyid-format", null, null, true, true),
+			OptionInfo("quiet", null, 'q', false)
 		)
 
 		private fun errorInvalidOption(context: Context, name: String): Nothing {
