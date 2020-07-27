@@ -11,11 +11,11 @@ import java.util.concurrent.ArrayBlockingQueue
 import kotlin.concurrent.thread
 
 const val ACTION_RUN_AGENT = "org.ddosolitary.okcagent.action.RUN_AGENT"
-const val ACTION_RESULT_CALLBACK = "org.ddosolitary.okcagent.action.RESULT_CALLBACK"
 const val EXTRA_PROXY_PORT = "org.ddosolitary.okcagent.extra.PROXY_PORT"
 const val RESULT_CODE_ERROR = 0
 const val RESULT_CODE_SUCCESS = 1
 const val RESULT_CODE_USER_INTERACTION_REQUIRED = 2
+private const val ACTION_RESULT_CALLBACK = "org.ddosolitary.okcagent.action.RESULT_CALLBACK"
 private const val ACTION_TERMINATE_SERVICE = "org.ddosolitary.okcagent.action.TERMINATE_SERVICE"
 private const val EXTRA_RESULT_CODE = "result_code"
 private const val EXTRA_PENDING_INTENT = "intent"
