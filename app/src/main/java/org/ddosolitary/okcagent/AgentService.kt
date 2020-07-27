@@ -21,7 +21,8 @@ private const val EXTRA_RESULT_CODE = "result_code"
 private const val EXTRA_PENDING_INTENT = "intent"
 
 abstract class AgentService : Service() {
-	private class ThreadContext(val thread: Thread, val queue: ArrayBlockingQueue<Intent?>)
+	private class NullableIntentHolder(val intent: Intent?)
+	private class ThreadContext(val thread: Thread, val queue: ArrayBlockingQueue<NullableIntentHolder>)
 
 	private val threadMap = mutableMapOf<Int, ThreadContext>()
 	private var exited = false
@@ -65,7 +66,7 @@ abstract class AgentService : Service() {
 							}
 						)
 					})
-					reqIntent = threadMap[port]!!.queue.take() ?: return null
+					reqIntent = threadMap[port]!!.queue.take().intent ?: return null
 				}
 				RESULT_CODE_ERROR -> {
 					showError(this, getErrorMessage(resIntent) ?: getString(R.string.error_api))
@@ -114,7 +115,7 @@ abstract class AgentService : Service() {
 				} else checkServiceExit()
 			}
 			ACTION_RESULT_CALLBACK -> threadMap[port]?.queue
-				?.put(intent.getParcelableExtra(EXTRA_RESULT_INTENT)) ?: checkServiceExit()
+				?.put(NullableIntentHolder(intent.getParcelableExtra(EXTRA_RESULT_INTENT))) ?: checkServiceExit()
 			ACTION_TERMINATE_SERVICE -> stopSelf()
 		}
 		return START_NOT_STICKY
