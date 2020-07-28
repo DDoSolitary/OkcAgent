@@ -4,6 +4,7 @@
 	<string name="button_ok">OK</string>
 	<string name="button_select_key">Select Key</string>
 	<string name="channel_auth">Authorization requests</string>
+	<string name="channel_error">Errors</string>
 	<string name="channel_service">Agent services</string>
 	<string name="error_api">Error occurred when invoking crypto provider.</string>
 	<string name="error_connect">Error occurred when connecting to the crypto provider. This app requires the OpenKeychain app to function properly. Please make sure that OpenKeychain has been installed on your device.</string>
