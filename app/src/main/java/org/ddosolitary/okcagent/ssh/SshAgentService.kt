@@ -78,7 +78,12 @@ class SshAgentService : AgentService() {
 						}
 						else -> null
 					}
-					(resMsg ?: SshAgentMessage(SSH_AGENT_FAILURE, null)).writeToStream(output)
+					if (resMsg != null) {
+						resMsg.writeToStream(output)
+					} else {
+						SshAgentMessage(SSH_AGENT_FAILURE, null).writeToStream(output)
+						break
+					}
 				}
 			}
 		} catch (e: Exception) {
