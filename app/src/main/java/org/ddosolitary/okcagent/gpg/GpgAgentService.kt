@@ -33,10 +33,10 @@ class GpgAgentService : AgentService() {
 			6 -> "RESULT_INVALID_KEY_INSECURE"
 			else -> "N/A"
 		}
-		writeString(
-			output,
-			getString(R.string.msg_signature_from).format(res.primaryUserId ?: "N/A")
-		)
+		if (res.primaryUserId != null) {
+			writeString(output, getString(R.string.msg_signature_from).format(res.primaryUserId))
+			writeString(output, getString(R.string.msg_signature_time).format(res.signatureTimestamp.toString()))
+		}
 		writeString(output, getString(R.string.msg_signature_result).format(resStr))
 		return res.result == -1 || res.result == 1 || res.result == 3
 	}
