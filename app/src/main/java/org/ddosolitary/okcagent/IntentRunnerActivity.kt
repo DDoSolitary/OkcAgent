@@ -53,6 +53,7 @@ class IntentRunnerActivity : AppCompatActivity() {
 			startService(it.apply { putExtra(EXTRA_RESULT_INTENT, res) })
 		}
 		vm.requestMap.remove(requestCode)
+		if (vm.requestMap.isEmpty()) finish()
 	}
 
 	override fun onDestroy() {
