@@ -207,11 +207,15 @@ class GpgAgentService : AgentService() {
 							}
 							else -> throw Exception(getString(R.string.error_gpg_no_action))
 						}
-						if (reqIntent.hasExtra(EXTRA_SIGN_KEY_ID) && args.options.containsKey("status-fd")) {
-							writeString(
-								controlOutput,
-								"[GNUPG:] SIG_CREATED This line is only used to make git happy!"
-							)
+						if (reqIntent.hasExtra(EXTRA_SIGN_KEY_ID)) {
+							when (args.options["status-fd"]) {
+								null -> Unit
+								"1" -> throw Exception(getString(R.string.error_invalid_status_fd))
+								"2" -> writeString(
+									controlOutput,
+									"[GNUPG:] SIG_CREATED This line is only used to make git happy!"
+								)
+							}
 						}
 					}
 				}
