@@ -128,10 +128,22 @@ class GpgAgentService : AgentService() {
 									throw Exception(
 										getString(R.string.error_required_option).format("recipient")
 									)
-								} else if (Regex("^[0-9a-zA-Z]{16}$").matches(recipient)) {
-									reqIntent.putExtra(EXTRA_KEY_IDS, arrayOf(recipient.toLong(16)))
 								} else {
-									reqIntent.putExtra(EXTRA_USER_IDS, arrayOf(recipient))
+									val keyIds = mutableListOf<Long>()
+									val userIds = mutableListOf<String>()
+									for (r in recipient.split('\u0000')) {
+										if (Regex("^[0-9a-zA-Z]{16}$").matches(r)) {
+											keyIds.add(r.toLong(16))
+										} else {
+											userIds.add(r)
+										}
+									}
+									if (keyIds.isNotEmpty()) {
+										reqIntent.putExtra(EXTRA_KEY_IDS, keyIds.toLongArray())
+									}
+									if (userIds.isNotEmpty()) {
+										reqIntent.putExtra(EXTRA_USER_IDS, userIds.toTypedArray())
+									}
 								}
 								if (args.options.containsKey("sign")) {
 									reqIntent.action = ACTION_SIGN_AND_ENCRYPT

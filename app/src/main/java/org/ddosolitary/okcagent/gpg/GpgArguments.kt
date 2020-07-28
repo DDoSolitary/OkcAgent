@@ -55,6 +55,14 @@ class GpgArguments(
 			throw Exception(context.getString(R.string.error_option).format(name))
 		}
 
+		private fun setOption(options: MutableMap<String, String?>, name: String, value: String?) {
+			if (name == "recipient" && options.containsKey(name) && value != null) {
+				options[name] = "%s\u0000%s".format(options[name], value);
+			} else {
+				options[name] = value
+			}
+		}
+
 		fun parse(context: Context, args: Collection<String>?): GpgArguments {
 			val options = mutableMapOf<String, String?>()
 			val arguments = mutableListOf<String>()
@@ -70,7 +78,7 @@ class GpgArguments(
 					}
 				}
 				if (pendingArg != null) {
-					options[pendingArg] = s
+					setOption(options, pendingArg, s)
 					pendingArg = null
 				} else if (s.startsWith("--")) {
 					var pos = s.indexOf('=')
@@ -84,23 +92,23 @@ class GpgArguments(
 						if (value.isEmpty()) {
 							pendingArg = info.longName
 						} else {
-							options[info.longName] = value
+							setOption(options, info.longName, value)
 						}
 					} else {
-						if (value.isEmpty()) options[info.longName] = null
+						if (value.isEmpty()) setOption(options, info.longName, null)
 						else errorInvalidOption(context, name)
 					}
 				} else if (s.startsWith('-') && s != "-") {
 					for (i in 1 until s.length) {
 						if (pendingArg != null) {
-							options[pendingArg] = s.substring(i)
+							setOption(options, pendingArg, s.substring(i))
 							break
 						}
 						val info = OptionList.find { it.shortName == s[i] }
 							?: errorInvalidOption(context, s[i].toString())
 						checkSupported(s[i].toString(), info)
 						if (info.hasValue) pendingArg = info.longName
-						else options[info.longName] = null
+						else setOption(options, info.longName, null)
 					}
 				} else {
 					arguments.add(s)
