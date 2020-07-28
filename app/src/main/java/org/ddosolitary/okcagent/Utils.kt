@@ -8,6 +8,10 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import java.io.OutputStream
+import java.util.concurrent.atomic.AtomicInteger
+
+private val NOTIFICATION_ID_COUNTER = AtomicInteger(100000)
+private const val NOTIFICATION_GROUP_ERROR = "org.ddosolitary.okcagent.group.ERROR"
 
 fun showError(context: Context, msg: String) {
 	if (context is Service) {
@@ -26,8 +30,9 @@ fun showError(context: Context, msg: String) {
 			.setSmallIcon(R.drawable.ic_error)
 			.setContentTitle(context.getString(R.string.text_error))
 			.setContentText(msg)
+			.setGroup(NOTIFICATION_GROUP_ERROR)
 			.build()
-		mgr.notify(context.resources.getInteger(R.integer.notification_id_error), notification)
+		mgr.notify(NOTIFICATION_ID_COUNTER.getAndIncrement(), notification)
 	} else {
 		context.startActivity(Intent(context, ErrorDialogActivity::class.java).apply {
 			flags = Intent.FLAG_ACTIVITY_NEW_TASK

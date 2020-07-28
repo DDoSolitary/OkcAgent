@@ -7,7 +7,6 @@
 	<string name="channel_id_service" translatable="false">NOTIFICATION_CHANNEL_SERVICE</string>
 	<integer name="notification_id_ssh">1</integer>
 	<integer name="notification_id_gpg">2</integer>
-	<integer name="notification_id_error">3</integer>
 	<string name="pref_main" translatable="false">MAIN_PREFERENCES</string>
 	<string name="provider_package_id" translatable="false">org.sufficientlysecure.keychain</string>
 </resources>
