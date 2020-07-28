@@ -128,6 +128,8 @@ class GpgAgentService : AgentService() {
 									throw Exception(
 										getString(R.string.error_required_option).format("recipient")
 									)
+								} else if (Regex("^[0-9a-zA-Z]{16}$").matches(recipient)) {
+									reqIntent.putExtra(EXTRA_KEY_IDS, arrayOf(recipient.toLong(16)))
 								} else {
 									reqIntent.putExtra(EXTRA_USER_IDS, arrayOf(recipient))
 								}
