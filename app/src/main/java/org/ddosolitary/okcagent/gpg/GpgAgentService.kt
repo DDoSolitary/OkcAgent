@@ -93,6 +93,9 @@ class GpgAgentService : AgentService() {
 							reqIntent.putExtra(EXTRA_ORIGINAL_FILENAME, it)
 						}
 						when {
+							args.options.containsKey("list-config") -> {
+								// no-op
+							}
 							args.options.containsKey("clear-sign") -> {
 								reqIntent.action = ACTION_CLEARTEXT_SIGN
 								reqIntent.putExtra(EXTRA_SIGN_KEY_ID, keyId)

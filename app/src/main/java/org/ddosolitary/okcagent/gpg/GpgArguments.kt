@@ -34,7 +34,21 @@ class GpgArguments(
 			OptionInfo("default-user", null, null, false, true),
 			OptionInfo("status-fd", null, null, true, false),
 			OptionInfo("keyid-format", null, null, true, true),
-			OptionInfo("quiet", null, 'q', false)
+			OptionInfo("quiet", null, 'q', false),
+			OptionInfo("yes", null, null, false),
+			OptionInfo("no", null, null, false),
+			OptionInfo("compress-algo", null, null, true, true),
+			OptionInfo("batch", null, null, false, true),
+			OptionInfo("no-batch", null, null, false, true),
+			OptionInfo("no-encrypt-to", null, null, false),
+			OptionInfo("use-agent", null, null, false),
+			OptionInfo("no-use-agent", null, null, false),
+			OptionInfo("verbose", null, 'v', false),
+			OptionInfo("no-verbose", null, null, false),
+			OptionInfo("no-secmem-warning", null, null, false),
+			OptionInfo("no-permission-warning", null, null, false),
+			OptionInfo("list-config", null, null, false),
+			OptionInfo("with-colons", null, null, false)
 		)
 
 		private fun errorInvalidOption(context: Context, name: String): Nothing {
