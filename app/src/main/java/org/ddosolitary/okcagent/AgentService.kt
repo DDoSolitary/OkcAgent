@@ -70,7 +70,7 @@ abstract class AgentService : Service() {
 					val notification = NotificationCompat.Builder(this, getString(R.string.channel_id_auth))
 						.setPriority(NotificationCompat.PRIORITY_HIGH)
 						.setSmallIcon(R.drawable.ic_key)
-						.setContentText(getString(R.string.notification_auth_title))
+						.setContentTitle(getString(R.string.notification_auth_title))
 						.setContentText(getString(R.string.notification_auth_content))
 						.setAutoCancel(true)
 						.setOngoing(true)
