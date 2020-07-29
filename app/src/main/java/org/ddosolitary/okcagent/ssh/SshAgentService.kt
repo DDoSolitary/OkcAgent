@@ -102,8 +102,9 @@ class SshAgentService : AgentService() {
 	override fun onCreate() {
 		super.onCreate()
 		startForeground(
-			resources.getInteger(R.integer.notification_id_ssh),
-			buildServiceNotification(R.string.notification_ssh_title, R.string.notification_ssh_content)
+			R.string.notification_ssh_title,
+			R.string.notification_ssh_content,
+			R.integer.notification_id_ssh
 		)
 	}
 }

@@ -87,16 +87,17 @@ abstract class AgentService : Service() {
 		}
 	}
 
-	protected fun buildServiceNotification(title: Int, text: Int): Notification {
+	protected fun startForeground(title: Int, text: Int, id: Int) {
 		val intent = Intent(this, this.javaClass).apply { action = ACTION_TERMINATE_SERVICE }
-		val pi = PendingIntent.getService(this, 0, intent, 0)
-		return NotificationCompat.Builder(this, getString(R.string.channel_id_service))
+		val pi = PendingIntent.getService(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+		val notification = NotificationCompat.Builder(this, getString(R.string.channel_id_service))
 			.setPriority(NotificationCompat.PRIORITY_MIN)
 			.setSmallIcon(R.drawable.ic_key)
 			.setContentTitle(getString(title))
 			.setContentText(getString(text))
 			.addAction(R.drawable.ic_stop, getString(R.string.text_terminate), pi)
 			.build()
+		startForeground(id, notification)
 	}
 
 	override fun onBind(intent: Intent): IBinder? = null

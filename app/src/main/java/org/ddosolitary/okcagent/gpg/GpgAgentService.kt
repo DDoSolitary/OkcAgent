@@ -259,8 +259,9 @@ class GpgAgentService : AgentService() {
 	override fun onCreate() {
 		super.onCreate()
 		startForeground(
-			resources.getInteger(R.integer.notification_id_gpg),
-			buildServiceNotification(R.string.notification_gpg_title, R.string.notification_gpg_content)
+			R.string.notification_gpg_title,
+			R.string.notification_gpg_content,
+			R.integer.notification_id_gpg
 		)
 	}
 }
