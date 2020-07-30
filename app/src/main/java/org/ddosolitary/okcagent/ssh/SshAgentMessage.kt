@@ -34,7 +34,7 @@ class SshAgentMessage(val type: Byte, val contents: ByteArray?) {
 				order(ByteOrder.BIG_ENDIAN)
 			}.getInt()
 			val type = when (val x = stream.read()) {
-				-1 -> return null
+				-1 -> throw EOFException()
 				else -> x.toByte()
 			}
 			val contents = if (len > 1) readFull(stream, len - 1) ?: throw EOFException() else null
