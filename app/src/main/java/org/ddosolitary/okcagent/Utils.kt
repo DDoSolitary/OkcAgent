@@ -8,6 +8,8 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import java.io.OutputStream
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.util.concurrent.atomic.AtomicInteger
 
 private val NOTIFICATION_ID_COUNTER = AtomicInteger(100000)
@@ -44,10 +46,12 @@ fun showError(context: Context, resId: Int) = showError(context, context.getStri
 
 fun writeString(output: OutputStream, str: String) {
 	val strBuf = str.toByteArray(Charsets.UTF_8)
-	val lenBuf = byteArrayOf(
-		(strBuf.size shr 8).toByte(),
-		(strBuf.size and Byte.MAX_VALUE.toInt()).toByte()
-	)
+	val len = minOf(strBuf.size, UShort.MAX_VALUE.toInt()).toUShort()
+	val lenBuf = ByteArray(Short.SIZE_BYTES)
+	ByteBuffer.wrap(lenBuf).apply {
+		order(ByteOrder.BIG_ENDIAN)
+		putShort(len.toShort())
+	}
 	output.write(lenBuf)
 	output.write(strBuf)
 	output.flush()

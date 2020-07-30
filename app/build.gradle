@@ -42,3 +42,7 @@ dependencies {
 	implementation 'org.sufficientlysecure:sshauthentication-api:1.0'
 	implementation 'org.sufficientlysecure:openpgp-api:12.0'
 }
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+	kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlin.ExperimentalUnsignedTypes"]
+}
