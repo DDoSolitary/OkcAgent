@@ -9,6 +9,8 @@
 	<string name="error_api">Error occurred when invoking crypto provider.</string>
 	<string name="error_connect">Error occurred when connecting to the crypto provider. This app requires the OpenKeychain app to function properly. Please make sure that OpenKeychain has been installed on your device.</string>
 	<string name="error_gpg_no_action">No supported action is found</string>
+	<string name="error_incompatible_gpg_proto_ver">okc-gpg is using an incompatible protocol version (<xliff:g>%d</xliff:g>), only version <xliff:g>%d</xliff:g> is supported.</string>
+	<string name="error_incompatible_ssh_proto_ver">okc-ssh-agent is using an incompatible protocol version (<xliff:g>%d</xliff:g>), only version <xliff:g>%d</xliff:g> is supported.</string>
 	<string name="error_invalid_status_fd" tools:ignore="TypographyDashes">Only writing status to stderr (--status-fd=2) is supported.</string>
 	<string name="error_option">Invalid option: <xliff:g>%s</xliff:g></string>
 	<string name="error_required_option">Required option \"<xliff:g>%s</xliff:g>\" is not found</string>

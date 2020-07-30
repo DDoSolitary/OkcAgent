@@ -7,8 +7,19 @@ import androidx.core.content.ContextCompat
 import org.ddosolitary.okcagent.gpg.EXTRA_GPG_ARGS
 import org.ddosolitary.okcagent.gpg.GpgAgentService
 
+private const val EXTRA_GPG_PROTO_VER = "org.ddosolitary.okcagent.extra.GPG_PROTO_VER"
+private const val PROTO_VER = 0
+
 class GpgProxyReceiver : BroadcastReceiver() {
 	override fun onReceive(context: Context, intent: Intent) {
+		val clientProto = intent.getIntExtra(EXTRA_GPG_PROTO_VER, 0)
+		if (clientProto != PROTO_VER) {
+			showError(
+				context,
+				context.getString(R.string.error_incompatible_gpg_proto_ver).format(clientProto, PROTO_VER)
+			)
+			return
+		}
 		ContextCompat.startForegroundService(
 			context,
 			Intent(context, GpgAgentService::class.java).apply {

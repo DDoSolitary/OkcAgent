@@ -1,8 +1,8 @@
 package org.ddosolitary.okcagent
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -14,7 +14,12 @@ private val NOTIFICATION_ID_COUNTER = AtomicInteger(100000)
 private const val NOTIFICATION_GROUP_ERROR = "org.ddosolitary.okcagent.group.ERROR"
 
 fun showError(context: Context, msg: String) {
-	if (context is Service) {
+	if (context is Activity) {
+		context.startActivity(Intent(context, ErrorDialogActivity::class.java).apply {
+			flags = Intent.FLAG_ACTIVITY_NEW_TASK
+			putExtra(EXTRA_ERROR_MESSAGE, msg)
+		})
+	} else {
 		val mgr = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			mgr.createNotificationChannel(
@@ -33,11 +38,6 @@ fun showError(context: Context, msg: String) {
 			.setGroup(NOTIFICATION_GROUP_ERROR)
 			.build()
 		mgr.notify(NOTIFICATION_ID_COUNTER.getAndIncrement(), notification)
-	} else {
-		context.startActivity(Intent(context, ErrorDialogActivity::class.java).apply {
-			flags = Intent.FLAG_ACTIVITY_NEW_TASK
-			putExtra(EXTRA_ERROR_MESSAGE, msg)
-		})
 	}
 }
 
