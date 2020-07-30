@@ -46,12 +46,10 @@ class GpgAgentService : AgentService() {
 	}
 
 	override fun runAgent(port: Int, intent: Intent) {
-		var controlSocket: Socket? = null
 		var controlOutput: OutputStream? = null
 		var success = true
 		try {
-			controlSocket = Socket("127.0.0.1", port)
-			controlOutput = controlSocket.getOutputStream().also { it.write(0) }
+			controlOutput = Socket("127.0.0.1", port).getOutputStream().also { it.write(0) }
 			val args = GpgArguments.parse(
 				this,
 				intent.getStringArrayExtra(EXTRA_GPG_ARGS)
@@ -248,7 +246,7 @@ class GpgAgentService : AgentService() {
 		} finally {
 			try {
 				controlOutput?.write(byteArrayOf(0, 0, if (success) 0 else 1))
-				controlSocket?.close()
+				controlOutput?.close()
 			} catch (e: Exception) {
 				Log.w(LOG_TAG, "Failed to send status code on exit: %s".format(e))
 			}
