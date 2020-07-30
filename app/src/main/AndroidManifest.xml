@@ -55,6 +55,7 @@
 		<activity
 			android:name=".ErrorDialogActivity"
 			android:taskAffinity=""
+			android:excludeFromRecents="true"
 			android:theme="@style/AppTheme.Dialog" />
 	</application>
 
