@@ -11,7 +11,6 @@ import java.io.OutputStream
 import java.util.concurrent.atomic.AtomicInteger
 
 private val NOTIFICATION_ID_COUNTER = AtomicInteger(100000)
-private const val NOTIFICATION_GROUP_ERROR = "org.ddosolitary.okcagent.group.ERROR"
 
 fun showError(context: Context, msg: String) {
 	if (context is Activity) {
@@ -36,7 +35,6 @@ fun showError(context: Context, msg: String) {
 			.setContentTitle(context.getString(R.string.text_error))
 			.setContentText(msg)
 			.setStyle(NotificationCompat.BigTextStyle().bigText(msg))
-			.setGroup(NOTIFICATION_GROUP_ERROR)
 			.build()
 		mgr.notify(NOTIFICATION_ID_COUNTER.getAndIncrement(), notification)
 	}
