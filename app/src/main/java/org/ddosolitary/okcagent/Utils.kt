@@ -35,6 +35,7 @@ fun showError(context: Context, msg: String) {
 			.setSmallIcon(R.drawable.ic_error)
 			.setContentTitle(context.getString(R.string.text_error))
 			.setContentText(msg)
+			.setStyle(NotificationCompat.BigTextStyle().bigText(msg))
 			.setGroup(NOTIFICATION_GROUP_ERROR)
 			.build()
 		mgr.notify(NOTIFICATION_ID_COUNTER.getAndIncrement(), notification)

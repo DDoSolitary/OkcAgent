@@ -72,6 +72,9 @@ abstract class AgentService : Service() {
 						.setSmallIcon(R.drawable.ic_key)
 						.setContentTitle(getString(R.string.notification_auth_title))
 						.setContentText(getString(R.string.notification_auth_content))
+						.setStyle(NotificationCompat.BigTextStyle().bigText(
+							getString(R.string.notification_auth_content)
+						))
 						.setAutoCancel(true)
 						.setOngoing(true)
 						.setContentIntent(pi)
