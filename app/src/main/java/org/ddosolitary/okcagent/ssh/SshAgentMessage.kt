@@ -6,13 +6,13 @@ import java.io.OutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-const val SSH_AGENT_FAILURE = 5
-const val SSH_AGENTC_REQUEST_IDENTITIES = 11
-const val SSH_AGENT_IDENTITIES_ANSWER = 12
-const val SSH_AGENTC_SIGN_REQUEST = 13
-const val SSH_AGENT_SIGN_RESPONSE = 14
+const val SSH_AGENT_FAILURE: Byte = 5
+const val SSH_AGENTC_REQUEST_IDENTITIES: Byte = 11
+const val SSH_AGENT_IDENTITIES_ANSWER: Byte = 12
+const val SSH_AGENTC_SIGN_REQUEST: Byte = 13
+const val SSH_AGENT_SIGN_RESPONSE: Byte = 14
 
-class SshAgentMessage(val type: Int, val contents: ByteArray?) {
+class SshAgentMessage(val type: Byte, val contents: ByteArray?) {
 	companion object {
 		private fun readFull(stream: InputStream, size: Int): ByteArray? {
 			val buf = ByteArray(size)
@@ -35,7 +35,7 @@ class SshAgentMessage(val type: Int, val contents: ByteArray?) {
 			}.getInt()
 			val type = when (val x = stream.read()) {
 				-1 -> return null
-				else -> x
+				else -> x.toByte()
 			}
 			val contents = if (len > 1) readFull(stream, len - 1) ?: throw EOFException() else null
 			return SshAgentMessage(type, contents)
@@ -47,7 +47,7 @@ class SshAgentMessage(val type: Int, val contents: ByteArray?) {
 		ByteBuffer.wrap(bytes).apply {
 			order(ByteOrder.BIG_ENDIAN)
 			putInt(bytes.size - Int.SIZE_BYTES)
-			put(type.toByte())
+			put(type)
 			put(contents ?: return@apply)
 		}
 		stream.write(bytes)
