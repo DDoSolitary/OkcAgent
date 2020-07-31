@@ -3,8 +3,7 @@ package org.ddosolitary.okcagent.gpg
 import org.ddosolitary.okcagent.AgentService
 import org.ddosolitary.okcagent.readExact
 import org.ddosolitary.okcagent.writeString
-import java.io.EOFException
-import java.io.InputStream
+import java.io.*
 import java.net.Socket
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -14,6 +13,10 @@ class GpgInputWrapper(
 	private val path: String,
 	private val stat: AgentService.StreamStatus?
 ) : InputStream() {
+	private val tmpFileDelegate = lazy {
+		File.createTempFile("gpg-input-", null).apply { deleteOnExit() }
+	}
+	private val tmpFile by tmpFileDelegate
 	private val streamDelegate = lazy {
 		val socket = Socket("127.0.0.1", port)
 		socket.getOutputStream().let {
@@ -24,7 +27,7 @@ class GpgInputWrapper(
 		socket.getInputStream()
 	}
 	private val stream by streamDelegate
-	private var position: Int = 0
+	private var position: Long = 0
 	private var buffer: ByteArray? = null
 	private var bufferPosition = 0
 	private var eofReceived = false
@@ -72,20 +75,20 @@ class GpgInputWrapper(
 		}
 	}
 
-	override fun available(): Int {
-		return stream.available()
-	}
-
 	override fun close() {
 		if (streamDelegate.isInitialized()) {
 			stream.close()
+		}
+		if (tmpFileDelegate.isInitialized()) {
+			tmpFile.delete()
 		}
 	}
 
 	fun getAutoReopenStream(): InputStream {
 		return object : InputStream() {
-			private val buffer = ArrayList<Byte>()
-			private var position: Int = 0
+			private var tmpInput: FileInputStream? = null
+			private var tmpOutput: FileOutputStream? = tmpFile.outputStream()
+			private var position: Long = 0
 			private var reopened = false
 
 			override fun read(): Int {
@@ -98,23 +101,21 @@ class GpgInputWrapper(
 			}
 
 			override fun read(b: ByteArray, off: Int, len: Int): Int {
-				return if (position < buffer.size) {
+				if (reopened && tmpInput == null) tmpInput = tmpFile.inputStream()
+				return if (position < tmpInput?.channel?.size() ?: 0) {
 					check(reopened)
-					val copyLen = minOf(len, buffer.size - position)
-					for (i in 0 until copyLen) {
-						b[off + i] = buffer[position + i]
-					}
-					position += copyLen
-					copyLen
+					val ret = tmpInput!!.read(b, off, len)
+					check(ret != -1)
+					position += ret
+					ret
 				} else {
 					check(position == this@GpgInputWrapper.position)
-					check(position == buffer.size)
 					val ret = this@GpgInputWrapper.read(b, off, len)
 					if (ret != -1) {
 						if (!reopened) {
-							buffer.ensureCapacity(buffer.size + ret)
-							for (i in off until off + ret) {
-								buffer.add(b[i])
+							tmpOutput!!.let {
+								check(position == it.channel.position())
+								it.write(b, off, ret)
 							}
 						}
 						position += ret
@@ -125,7 +126,14 @@ class GpgInputWrapper(
 
 			override fun close() {
 				position = 0
-				reopened = true
+				if (!reopened) {
+					tmpOutput!!.close()
+					tmpOutput = null
+					reopened = true
+				} else {
+					tmpInput?.close()
+					tmpInput = null
+				}
 			}
 		}
 	}
