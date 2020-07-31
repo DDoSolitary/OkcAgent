@@ -233,8 +233,9 @@ class GpgAgentService : AgentService() {
 				controlOutput?.let {
 					writeString(it, "[E] %s".format(e))
 				}
-			} catch (e: Exception) {
-				Log.w(LOG_TAG, "Failed to send error message for the exception: %s".format(e))
+			} catch (e2: Exception) {
+				Log.w(LOG_TAG, "Failed to send error message for the exception: %s".format(e2))
+				showError(this, e.toString())
 			}
 		} finally {
 			try {
