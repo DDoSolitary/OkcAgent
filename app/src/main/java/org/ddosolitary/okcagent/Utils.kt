@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import java.io.EOFException
+import java.io.InputStream
 import java.io.OutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -54,4 +56,18 @@ fun writeString(output: OutputStream, str: String) {
 	output.write(lenBuf)
 	output.write(strBuf)
 	output.flush()
+}
+
+fun readExact(stream: InputStream, size: Int): ByteArray? {
+	val buf = ByteArray(size)
+	var off = 0
+	while (off < size) {
+		val cnt = stream.read(buf, off, size - off)
+		if (cnt == -1) {
+			if (off == 0) return null
+			else throw EOFException()
+		}
+		off += cnt
+	}
+	return buf
 }

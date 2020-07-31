@@ -8,7 +8,7 @@ import org.ddosolitary.okcagent.gpg.EXTRA_GPG_ARGS
 import org.ddosolitary.okcagent.gpg.GpgAgentService
 
 private const val EXTRA_GPG_PROTO_VER = "org.ddosolitary.okcagent.extra.GPG_PROTO_VER"
-private const val PROTO_VER = 0
+private const val PROTO_VER = 1
 
 class GpgProxyReceiver : BroadcastReceiver() {
 	override fun onReceive(context: Context, intent: Intent) {

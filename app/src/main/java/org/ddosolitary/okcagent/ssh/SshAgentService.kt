@@ -48,7 +48,7 @@ class SshAgentService : AgentService() {
 					val resMsg = when (req.type) {
 						SSH_AGENTC_REQUEST_IDENTITIES -> {
 							val resIntent =
-								callApi(executeApi, SshPublicKeyRequest(keyId).toIntent(), port)
+								callApi(executeApi, SshPublicKeyRequest(keyId).toIntent(), port, null)
 							if (resIntent != null) {
 								val pubKeyStr = SshPublicKeyResponse(resIntent).sshPublicKey
 								SshAgentMessage(
@@ -67,7 +67,8 @@ class SshAgentService : AgentService() {
 							val resIntent = callApi(
 								executeApi,
 								SigningRequest(signReq.data, keyId, signReq.flags).toIntent(),
-								port
+								port,
+								null
 							)
 							if (resIntent != null) {
 								SshAgentMessage(

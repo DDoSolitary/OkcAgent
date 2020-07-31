@@ -1,5 +1,6 @@
 package org.ddosolitary.okcagent.ssh
 
+import org.ddosolitary.okcagent.readExact
 import java.io.EOFException
 import java.io.InputStream
 import java.io.OutputStream
@@ -14,30 +15,16 @@ const val SSH_AGENT_SIGN_RESPONSE: UByte = 14u
 
 class SshAgentMessage(val type: UByte, val contents: ByteArray?) {
 	companion object {
-		private fun readFull(stream: InputStream, size: Int): ByteArray? {
-			val buf = ByteArray(size)
-			var off = 0
-			while (off < size) {
-				val cnt = stream.read(buf, off, size - off)
-				if (cnt == -1) {
-					if (off == 0) return null
-					else throw EOFException()
-				}
-				off += cnt
-			}
-			return buf
-		}
-
 		@Suppress("UsePropertyAccessSyntax")
 		fun readFromStream(stream: InputStream): SshAgentMessage? {
-			val len = ByteBuffer.wrap(readFull(stream, Int.SIZE_BYTES) ?: return null).apply {
+			val len = ByteBuffer.wrap(readExact(stream, Int.SIZE_BYTES) ?: return null).apply {
 				order(ByteOrder.BIG_ENDIAN)
 			}.getInt()
 			val type = when (val x = stream.read()) {
 				-1 -> throw EOFException()
 				else -> x.toUByte()
 			}
-			val contents = if (len > 1) readFull(stream, len - 1) ?: throw EOFException() else null
+			val contents = if (len > 1) readExact(stream, len - 1) ?: throw EOFException() else null
 			return SshAgentMessage(type, contents)
 		}
 	}

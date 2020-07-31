@@ -1,16 +1,35 @@
 package org.ddosolitary.okcagent.gpg
 
+import org.ddosolitary.okcagent.AgentService
+import org.ddosolitary.okcagent.readExact
 import org.ddosolitary.okcagent.writeString
+import java.io.EOFException
 import java.io.InputStream
 import java.net.Socket
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import kotlin.math.min
 
 class GpgInputWrapper(
 	private val port: Int,
-	private val path: String
+	private val path: String,
+	private val stat: AgentService.StreamStatus?
 ) : InputStream() {
-	private var stream: InputStream? = null
+	private val streamDelegate = lazy {
+		val socket = Socket("127.0.0.1", port)
+		socket.getOutputStream().let {
+			it.write(1)
+			writeString(it, path)
+			it.flush()
+		}
+		socket.getInputStream()
+	}
+	private val stream by streamDelegate
 	private var position: Int = 0
+	private var buffer: ByteArray? = null
+	private var bufferPosition = 0
+	private var eofReceived = false
+	private var eofExceptionThrown = false
 
 	override fun read(): Int {
 		val buf = ByteArray(1)
@@ -21,31 +40,46 @@ class GpgInputWrapper(
 		return read(b, 0, b.size)
 	}
 
+	@Suppress("UsePropertyAccessSyntax")
 	override fun read(b: ByteArray, off: Int, len: Int): Int {
-		ensureStreamOpened()
-		return stream!!.read(b, off, len).also {
-			if (it != -1) position += it
+		if (eofReceived) return -1
+		if (eofExceptionThrown) throw EOFException()
+		if (buffer == null) {
+			val lenBuf = readExact(stream, Short.SIZE_BYTES)
+			if (lenBuf == null) {
+				eofExceptionThrown = true
+				stat?.exception = EOFException()
+				throw EOFException()
+			}
+			val recvLen = ByteBuffer.wrap(lenBuf).apply {
+				order(ByteOrder.BIG_ENDIAN)
+			}.getShort().toUShort().toInt()
+			if (recvLen == 0) {
+				eofReceived = true
+				return -1
+			}
+			buffer = readExact(stream, recvLen)
+			bufferPosition = 0
+		}
+		buffer!!.let {
+			val copyLen = minOf(len, it.size - bufferPosition)
+			it.copyInto(b, off, bufferPosition, bufferPosition + copyLen)
+			bufferPosition += copyLen
+			position += copyLen
+			if (bufferPosition == it.size) {
+				buffer = null
+			}
+			return copyLen
 		}
 	}
 
 	override fun available(): Int {
-		ensureStreamOpened()
-		return stream!!.available()
+		return stream.available()
 	}
 
 	override fun close() {
-		stream?.close()
-	}
-
-	private fun ensureStreamOpened() {
-		if (stream == null) {
-			val socket = Socket("127.0.0.1", port)
-			socket.getOutputStream().let {
-				it.write(1)
-				writeString(it, path)
-				it.flush()
-			}
-			stream = socket.getInputStream()
+		if (streamDelegate.isInitialized()) {
+			stream.close()
 		}
 	}
 

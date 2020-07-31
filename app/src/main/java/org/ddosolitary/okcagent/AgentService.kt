@@ -23,6 +23,7 @@ private const val EXTRA_PENDING_INTENT = "intent"
 abstract class AgentService : Service() {
 	private class NullableIntentHolder(val intent: Intent?)
 	private class ThreadContext(val thread: Thread, val queue: ArrayBlockingQueue<NullableIntentHolder>)
+	class StreamStatus(var exception: Exception?)
 
 	private val threadMap = mutableMapOf<Int, ThreadContext>()
 	private var exited = false
@@ -44,10 +45,11 @@ abstract class AgentService : Service() {
 
 	protected abstract fun runAgent(port: Int, intent: Intent)
 
-	protected fun callApi(executeApi: (Intent) -> Intent?, req: Intent, port: Int): Intent? {
+	protected fun callApi(executeApi: (Intent) -> Intent?, req: Intent, port: Int, stat: StreamStatus?): Intent? {
 		var reqIntent = req
 		while (true) {
 			val resIntent = executeApi(reqIntent)!!
+			stat?.exception?.let { throw it }
 			when (resIntent.getIntExtra(EXTRA_RESULT_CODE, RESULT_CODE_ERROR)) {
 				RESULT_CODE_SUCCESS -> return resIntent
 				RESULT_CODE_USER_INTERACTION_REQUIRED -> {

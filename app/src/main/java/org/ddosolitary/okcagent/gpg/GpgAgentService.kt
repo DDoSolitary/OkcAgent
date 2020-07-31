@@ -60,15 +60,14 @@ class GpgAgentService : AgentService() {
 			}
 			val keyId = getSharedPreferences(getString(R.string.pref_main), Context.MODE_PRIVATE)
 				.getLong(getString(R.string.key_gpg_key), -1)
+			val inputStat = StreamStatus(null)
 			GpgInputWrapper(
 				port,
-				if (args.arguments.isNotEmpty()) args.arguments.last() else "-"
+				if (args.arguments.isNotEmpty()) args.arguments.last() else "-",
+				inputStat
 			).use { input ->
 				val wrappedInput = input.getAutoReopenStream()
-				GpgOutputWrapper(
-					port,
-					args.options["output"] ?: "-"
-				).use { output ->
+				GpgOutputWrapper(port, args.options["output"] ?: "-").use { output ->
 					val lock = Semaphore(0)
 					var connRes = false
 					GpgApi(this) { res ->
@@ -99,7 +98,7 @@ class GpgAgentService : AgentService() {
 								reqIntent.putExtra(EXTRA_SIGN_KEY_ID, keyId)
 								val resIntent = callApi(
 									{ api.executeApi(it, wrappedInput, output) },
-									reqIntent, port
+									reqIntent, port, inputStat
 								)
 								if (resIntent == null) {
 									success = false
@@ -112,7 +111,7 @@ class GpgAgentService : AgentService() {
 								reqIntent.putExtra(EXTRA_SIGN_KEY_ID, keyId)
 								val resIntent = callApi(
 									{ api.executeApi(it, wrappedInput, null) },
-									reqIntent, port
+									reqIntent, port, inputStat
 								)
 								if (resIntent == null) {
 									success = false
@@ -151,7 +150,7 @@ class GpgAgentService : AgentService() {
 								}
 								val resIntent = callApi(
 									{ api.executeApi(it, wrappedInput, output) },
-									reqIntent, port
+									reqIntent, port, inputStat
 								)
 								if (resIntent == null) {
 									success = false
@@ -162,20 +161,14 @@ class GpgAgentService : AgentService() {
 							args.options.containsKey("verify") -> {
 								reqIntent.action = ACTION_DECRYPT_VERIFY
 								if (args.arguments.size > 1) {
-									Socket("127.0.0.1", port).use { sigSocket ->
-										sigSocket.getOutputStream().let {
-											it.write(1)
-											writeString(it, args.arguments[0])
-										}
-										reqIntent.putExtra(
-											EXTRA_DETACHED_SIGNATURE,
-											sigSocket.getInputStream().readBytes()
-										)
-									}
+									reqIntent.putExtra(
+										EXTRA_DETACHED_SIGNATURE,
+										GpgInputWrapper(port, args.arguments[0], null).use { it.readBytes() }
+									)
 								}
 								val resIntent = callApi(
 									{ api.executeApi(it, wrappedInput, output) },
-									reqIntent, port
+									reqIntent, port, inputStat
 								)
 								if (resIntent == null) {
 									success = false
@@ -192,7 +185,7 @@ class GpgAgentService : AgentService() {
 								reqIntent.action = ACTION_DECRYPT_VERIFY
 								val resIntent = callApi(
 									{ api.executeApi(it, wrappedInput, output) },
-									reqIntent, port
+									reqIntent, port, inputStat
 								)
 								if (resIntent == null) {
 									success = false
