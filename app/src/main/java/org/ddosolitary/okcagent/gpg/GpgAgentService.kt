@@ -119,27 +119,29 @@ class GpgAgentService : AgentService() {
 								}
 								output.write(resIntent.getByteArrayExtra(RESULT_DETACHED_SIGNATURE)!!)
 							}
-							args.options.containsKey("encrypt") -> {
-								val recipient = args.options["recipient"]
-								if (recipient == null) {
-									throw Exception(
-										getString(R.string.error_required_option).format("recipient")
-									)
-								} else {
-									val keyIds = mutableListOf<Long>()
-									val userIds = mutableListOf<String>()
-									for (r in recipient.split('\u0000')) {
-										if (Regex("^[0-9a-zA-Z]{16}$").matches(r)) {
-											keyIds.add(r.toLong(16))
-										} else {
-											userIds.add(r)
+							args.options.containsKey("encrypt") || args.options.containsKey("sign") -> {
+								if (args.options.containsKey("encrypt")) {
+									val recipient = args.options["recipient"]
+									if (recipient == null) {
+										throw Exception(
+											getString(R.string.error_required_option).format("recipient")
+										)
+									} else {
+										val keyIds = mutableListOf<Long>()
+										val userIds = mutableListOf<String>()
+										for (r in recipient.split('\u0000')) {
+											if (Regex("^[0-9a-zA-Z]{16}$").matches(r)) {
+												keyIds.add(r.toLong(16))
+											} else {
+												userIds.add(r)
+											}
 										}
-									}
-									if (keyIds.isNotEmpty()) {
-										reqIntent.putExtra(EXTRA_KEY_IDS, keyIds.toLongArray())
-									}
-									if (userIds.isNotEmpty()) {
-										reqIntent.putExtra(EXTRA_USER_IDS, userIds.toTypedArray())
+										if (keyIds.isNotEmpty()) {
+											reqIntent.putExtra(EXTRA_KEY_IDS, keyIds.toLongArray())
+										}
+										if (userIds.isNotEmpty()) {
+											reqIntent.putExtra(EXTRA_USER_IDS, userIds.toTypedArray())
+										}
 									}
 								}
 								if (args.options.containsKey("sign")) {
