@@ -6,15 +6,8 @@ import java.net.Socket
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-class GpgOutputWrapper(port: Int, path: String) : OutputStream() {
-	private val streamDelegate = lazy {
-		Socket("127.0.0.1", port).apply { setSoLinger(true, 1) }.getOutputStream().also {
-			it.write(2)
-			writeString(it, path)
-		}
-	}
-	private val stream by streamDelegate
-	private var closed = false
+class GpgOutputWrapper(private val port: Int, private val path: String) : OutputStream() {
+	private var stream: OutputStream? = null
 
 	override fun write(b: Int) {
 		write(byteArrayOf(b.toByte()))
@@ -25,6 +18,13 @@ class GpgOutputWrapper(port: Int, path: String) : OutputStream() {
 	}
 
 	override fun write(b: ByteArray, off: Int, len: Int) {
+		if (stream == null) {
+			stream = Socket("127.0.0.1", port).apply { setSoLinger(true, 1) }.getOutputStream().also {
+				it.write(2)
+				writeString(it, path)
+			}
+		}
+
 		var cur = off
 		while (cur < off + len) {
 			val frameLen = minOf(UShort.MAX_VALUE.toInt(), off + len - cur)
@@ -32,21 +32,20 @@ class GpgOutputWrapper(port: Int, path: String) : OutputStream() {
 				order(ByteOrder.BIG_ENDIAN)
 				putShort(frameLen.toUShort().toShort())
 			}.array()
-			stream.write(lenBuf)
-			stream.write(b, cur, frameLen)
+			stream!!.write(lenBuf)
+			stream!!.write(b, cur, frameLen)
 			cur += frameLen
 		}
 	}
 
 	override fun flush() {
-		stream.flush()
+		stream?.flush()
 	}
 
 	override fun close() {
-		if (streamDelegate.isInitialized() && !closed) {
-			stream.write(byteArrayOf(0, 0))
-			stream.close()
-			closed = true
+		stream?.use {
+			it.write(byteArrayOf(0, 0))
+			stream = null
 		}
 	}
 }

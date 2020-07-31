@@ -8,7 +8,6 @@ import java.io.InputStream
 import java.net.Socket
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import kotlin.math.min
 
 class GpgInputWrapper(
 	private val port: Int,
@@ -85,9 +84,9 @@ class GpgInputWrapper(
 
 	fun getAutoReopenStream(): InputStream {
 		return object : InputStream() {
-			val buffer = ByteArray(1048576)
-			var position: Int = 0
-			var bufferPosition: Int = 0
+			private val buffer = ArrayList<Byte>()
+			private var position: Int = 0
+			private var reopened = false
 
 			override fun read(): Int {
 				val buf = ByteArray(1)
@@ -99,19 +98,24 @@ class GpgInputWrapper(
 			}
 
 			override fun read(b: ByteArray, off: Int, len: Int): Int {
-				return if (position < bufferPosition) {
-					val copyLen = min(len, bufferPosition - position)
-					buffer.copyInto(b, off, position, position + copyLen)
+				return if (position < buffer.size) {
+					check(reopened)
+					val copyLen = minOf(len, buffer.size - position)
+					for (i in 0 until copyLen) {
+						b[off + i] = buffer[position + i]
+					}
 					position += copyLen
 					copyLen
 				} else {
 					check(position == this@GpgInputWrapper.position)
+					check(position == buffer.size)
 					val ret = this@GpgInputWrapper.read(b, off, len)
 					if (ret != -1) {
-						if (position < buffer.size) {
-							val copyLen = min(ret, buffer.size - bufferPosition)
-							b.copyInto(buffer, bufferPosition, off, off + copyLen)
-							bufferPosition += copyLen
+						if (!reopened) {
+							buffer.ensureCapacity(buffer.size + ret)
+							for (i in off until off + ret) {
+								buffer.add(b[i])
+							}
 						}
 						position += ret
 					}
@@ -121,6 +125,7 @@ class GpgInputWrapper(
 
 			override fun close() {
 				position = 0
+				reopened = true
 			}
 		}
 	}
