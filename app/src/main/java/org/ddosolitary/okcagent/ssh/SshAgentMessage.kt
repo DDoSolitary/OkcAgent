@@ -43,14 +43,14 @@ class SshAgentMessage(val type: UByte, val contents: ByteArray?) {
 	}
 
 	fun writeToStream(stream: OutputStream) {
-		val bytes = ByteArray(Int.SIZE_BYTES + Byte.SIZE_BYTES + (contents?.size ?: 0))
-		ByteBuffer.wrap(bytes).apply {
+		val bufSize = Int.SIZE_BYTES + Byte.SIZE_BYTES + (contents?.size ?: 0)
+		val buf = ByteBuffer.allocate(bufSize).apply {
 			order(ByteOrder.BIG_ENDIAN)
-			putInt(bytes.size - Int.SIZE_BYTES)
+			putInt(bufSize - Int.SIZE_BYTES)
 			put(type.toByte())
 			put(contents ?: return@apply)
-		}
-		stream.write(bytes)
+		}.array()
+		stream.write(buf)
 		stream.flush()
 	}
 }

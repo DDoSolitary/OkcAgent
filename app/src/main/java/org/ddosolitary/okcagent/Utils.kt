@@ -47,11 +47,10 @@ fun showError(context: Context, resId: Int) = showError(context, context.getStri
 fun writeString(output: OutputStream, str: String) {
 	val strBuf = str.toByteArray(Charsets.UTF_8)
 	val len = minOf(strBuf.size, UShort.MAX_VALUE.toInt()).toUShort()
-	val lenBuf = ByteArray(Short.SIZE_BYTES)
-	ByteBuffer.wrap(lenBuf).apply {
+	val lenBuf = ByteBuffer.allocate(Short.SIZE_BYTES).apply {
 		order(ByteOrder.BIG_ENDIAN)
 		putShort(len.toShort())
-	}
+	}.array()
 	output.write(lenBuf)
 	output.write(strBuf)
 	output.flush()
