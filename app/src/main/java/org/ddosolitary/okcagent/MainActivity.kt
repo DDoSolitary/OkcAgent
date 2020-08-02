@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() {
 			putLong(getString(R.string.key_gpg_key), keyId)
 			apply()
 		}
-		findViewById<TextView>(R.id.text_gpg_key).text = getString(R.string.text_has_gpg_key)
+		findViewById<TextView>(R.id.text_gpg_key).text = getString(R.string.text_has_gpg_key).format(keyId)
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -137,13 +137,13 @@ class MainActivity : AppCompatActivity() {
 			layoutManager = LinearLayoutManager(this@MainActivity)
 			adapter = adaptor
 		}
-		findViewById<TextView>(R.id.text_gpg_key).setText(
-			if (pref.getLong(getString(R.string.key_gpg_key), -1) == -1L) {
-				R.string.text_no_gpg_key
-			} else {
-				R.string.text_has_gpg_key
-			}
-		)
+		val textGpg = findViewById<TextView>(R.id.text_gpg_key)
+		val gpgKeyId = pref.getLong(getString(R.string.key_gpg_key), -1)
+		if (gpgKeyId == -1L) {
+			textGpg.setText(R.string.text_no_gpg_key)
+		} else {
+			textGpg.text = getString(R.string.text_has_gpg_key).format(gpgKeyId)
+		}
 	}
 
 	override fun onResume() {

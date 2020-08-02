@@ -29,7 +29,7 @@
 	<string name="notification_ssh_content">Serving SSH agent requests&#8230;</string>
 	<string name="notification_ssh_title">SSH Agent Service</string>
 	<string name="text_error">Error</string>
-	<string name="text_has_gpg_key">GPG key selected.</string>
+	<string name="text_has_gpg_key">GPG key selected: 0x<xliff:g>%016X</xliff:g></string>
 	<string name="text_no_gpg_key">No valid GPG key selected.</string>
 	<string name="text_no_provider">The OpenKeychain app, which this app relies upon, is not installed on this device. You need to install OpenKeychain before being able to use this app.</string>
 	<string name="text_no_ssh_key">No valid SSH key selected.</string>
