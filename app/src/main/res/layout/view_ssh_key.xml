@@ -12,7 +12,7 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toStartOf="@id/button_remove"
 		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toBottomOf="parent"/>
+		app:layout_constraintBottom_toBottomOf="parent" />
 
 	<ImageButton
 		android:id="@+id/button_remove"
@@ -20,8 +20,9 @@
 		android:layout_height="wrap_content"
 		android:src="@drawable/ic_cross"
 		android:background="?attr/selectableItemBackgroundBorderless"
+		android:contentDescription="@string/button_remove"
 		app:layout_constraintStart_toEndOf="@id/text_ssh_key"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toBottomOf="parent"/>
+		app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@
 	<string name="button_add_ssh_key">Add SSH Key</string>
 	<string name="button_install">Install Now</string>
 	<string name="button_ok">OK</string>
+	<string name="button_remove">Remove</string>
 	<string name="button_select_gpg_key">Select GPG Key</string>
 	<string name="channel_auth">Authorization requests</string>
 	<string name="channel_error">Errors</string>
