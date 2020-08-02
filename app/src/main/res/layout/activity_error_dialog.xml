@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:padding="@dimen/padding">
@@ -9,16 +8,14 @@
 		android:id="@+id/text_error"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_margin="@dimen/margin"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
+		android:layout_margin="@dimen/margin" />
 
 	<com.google.android.material.button.MaterialButton
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_below="@id/text_error"
+		android:layout_alignParentEnd="true"
 		android:layout_margin="@dimen/margin"
 		android:text="@string/button_ok"
-		android:onClick="onClickOk"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/text_error" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+		android:onClick="onClickOk" />
+</RelativeLayout>
