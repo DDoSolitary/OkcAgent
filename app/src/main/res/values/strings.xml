@@ -1,13 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<string name="app_name">OkcAgent</string>
+	<string name="button_add_ssh_key">Add SSH Key</string>
 	<string name="button_install">Install Now</string>
 	<string name="button_ok">OK</string>
-	<string name="button_select_key">Select Key</string>
+	<string name="button_select_gpg_key">Select GPG Key</string>
 	<string name="channel_auth">Authorization requests</string>
 	<string name="channel_error">Errors</string>
 	<string name="channel_service">Agent services</string>
 	<string name="error_api">Error occurred when invoking crypto provider.</string>
 	<string name="error_connect">Error occurred when connecting to the crypto provider. This app requires the OpenKeychain app to function properly. Please make sure that OpenKeychain has been installed on your device.</string>
+	<string name="error_duplicate_ssh_key">The key has already been added.</string>
 	<string name="error_gpg_no_action">No supported action is found</string>
 	<string name="error_incompatible_gpg_proto_ver">okc-gpg is using an incompatible protocol version (<xliff:g>%d</xliff:g>), only version <xliff:g>%d</xliff:g> is supported.</string>
 	<string name="error_incompatible_ssh_proto_ver">okc-ssh-agent is using an incompatible protocol version (<xliff:g>%d</xliff:g>), only version <xliff:g>%d</xliff:g> is supported.</string>
@@ -27,7 +29,6 @@
 	<string name="notification_ssh_title">SSH Agent Service</string>
 	<string name="text_error">Error</string>
 	<string name="text_has_gpg_key">GPG key selected.</string>
-	<string name="text_has_ssh_key">SSH key selected.</string>
 	<string name="text_no_gpg_key">No valid GPG key selected.</string>
 	<string name="text_no_provider">The OpenKeychain app, which this app relies upon, is not installed on this device. You need to install OpenKeychain before being able to use this app.</string>
 	<string name="text_no_ssh_key">No valid SSH key selected.</string>

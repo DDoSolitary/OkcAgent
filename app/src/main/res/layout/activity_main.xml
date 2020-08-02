@@ -22,34 +22,6 @@
 		app:layout_behavior="@string/appbar_scrolling_view_behavior"
 		tools:context=".MainActivity">
 
-		<TextView
-			android:id="@+id/text_ssh_key"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_margin="@dimen/margin" />
-
-		<com.google.android.material.button.MaterialButton
-			android:id="@+id/button_ssh_key"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_margin="@dimen/margin"
-			android:onClick="selectSshKey"
-			android:text="@string/button_select_key" />
-
-		<TextView
-			android:id="@+id/text_gpg_key"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_margin="@dimen/margin" />
-
-		<com.google.android.material.button.MaterialButton
-			android:id="@+id/button_gpg_key"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_margin="@dimen/margin"
-			android:onClick="selectGpgKey"
-			android:text="@string/button_select_key" />
-
 		<LinearLayout
 			android:id="@+id/layout_no_provider"
 			android:orientation="vertical"
@@ -69,6 +41,46 @@
 				android:layout_margin="@dimen/margin"
 				android:text="@string/button_install"
 				android:onClick="installProvider" />
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:layout_margin="@dimen/margin"
+				android:background="@android:color/darker_gray" />
 		</LinearLayout>
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/button_gpg_key"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="@dimen/margin"
+			android:onClick="selectGpgKey"
+			android:text="@string/button_select_gpg_key" />
+
+		<TextView
+			android:id="@+id/text_gpg_key"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="@dimen/margin" />
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:layout_margin="@dimen/margin"
+			android:background="@android:color/darker_gray" />
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/button_ssh_key"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="@dimen/margin"
+			android:onClick="addSshKey"
+			android:text="@string/button_add_ssh_key" />
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/recycler_ssh_keys"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_margin="@dimen/margin" />
 	</LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

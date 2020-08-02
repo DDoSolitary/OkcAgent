@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="key_gpg_key" translatable="false">GPG_KEY_ID</string>
-	<string name="key_ssh_key" translatable="false">SSH_KEY_ID</string>
+	<string name="key_ssh_keys" translatable="false">SSH_KEYS</string>
 	<string name="channel_id_auth" translatable="false">NOTIFICATION_CHANNEL_AUTH</string>
 	<string name="channel_id_error" translatable="false">NOTIFICATION_CHANNEL_ERROR</string>
 	<string name="channel_id_service" translatable="false">NOTIFICATION_CHANNEL_SERVICE</string>

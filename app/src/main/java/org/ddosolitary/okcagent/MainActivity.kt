@@ -6,12 +6,18 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.ddosolitary.okcagent.gpg.GpgApi
 import org.ddosolitary.okcagent.ssh.SshApi
+import org.ddosolitary.okcagent.ssh.SshKeyInfo
 import org.openintents.openpgp.OpenPgpError
 import org.openintents.openpgp.util.OpenPgpApi.*
 import org.openintents.ssh.authentication.request.KeySelectionRequest
@@ -22,16 +28,54 @@ private const val REQUEST_SELECT_SSH_KEY = 1
 private const val REQUEST_SELECT_GPG_KEY = 2
 
 class MainActivity : AppCompatActivity() {
+	private class SshKeyViewHolder(val view: View) : RecyclerView.ViewHolder(view)
+
+	private class SshKeyListAdaptor : RecyclerView.Adapter<SshKeyViewHolder>() {
+		var keys = mutableListOf<SshKeyInfo>()
+
+		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SshKeyViewHolder {
+			val view = LayoutInflater.from(parent.context).inflate(R.layout.view_ssh_key, parent, false)
+			return SshKeyViewHolder(view)
+		}
+
+		override fun getItemCount(): Int {
+			return if (keys.size == 0) 1 else keys.size
+		}
+
+		override fun onBindViewHolder(holder: SshKeyViewHolder, position: Int) {
+			val textView = holder.view.findViewById<TextView>(R.id.text_ssh_key)
+			val button = holder.view.findViewById<ImageButton>(R.id.button_remove)
+			if (keys.size == 0) {
+				textView.text = holder.view.context.getString(R.string.text_no_ssh_key)
+				button.visibility = View.GONE
+				button.setOnClickListener(null)
+			} else {
+				textView.text = keys[position].description
+				button.visibility = View.VISIBLE
+				button.setOnClickListener {
+					keys.removeAt(holder.adapterPosition)
+					SshKeyInfo.save(keys, it.context)
+					if (keys.size == 0) {
+						notifyItemChanged(0)
+					} else {
+						notifyItemRemoved(holder.adapterPosition)
+					}
+				}
+			}
+		}
+	}
+
 	private val pref by lazy {
 		getSharedPreferences(getString(R.string.pref_main), Context.MODE_PRIVATE)
 	}
 	private var sshApi: SshApi? = null
 	private var gpgApi: GpgApi? = null
+	private val adaptor = SshKeyListAdaptor()
 
-	private fun selectSshKeyCallback(intent: Intent) {
+	private fun addSshKeyCallback(intent: Intent) {
 		val res = KeySelectionResponse(intent)
 		when (res.resultCode) {
-			RESULT_CODE_SUCCESS -> updateSshKeyId(res.keyId)
+			RESULT_CODE_SUCCESS -> addSshKey(SshKeyInfo(res.keyId, res.keyDescription))
 			RESULT_CODE_ERROR -> showError(
 				this@MainActivity,
 				res.error?.message ?: getString(R.string.error_api)
@@ -62,12 +106,18 @@ class MainActivity : AppCompatActivity() {
 		}
 	}
 
-	private fun updateSshKeyId(keyId: String) {
-		pref.edit().apply {
-			putString(getString(R.string.key_ssh_key), keyId)
-			apply()
+	private fun addSshKey(key: SshKeyInfo) {
+		if (adaptor.keys.any { it.id == key.id }) {
+			showError(this, R.string.error_duplicate_ssh_key)
+			return
 		}
-		findViewById<TextView>(R.id.text_ssh_key).text = getString(R.string.text_has_ssh_key)
+		adaptor.keys.add(key)
+		SshKeyInfo.save(adaptor.keys, this)
+		if (adaptor.keys.size == 1) {
+			adaptor.notifyItemChanged(0)
+		} else {
+			adaptor.notifyItemInserted(adaptor.keys.size - 1)
+		}
 	}
 
 	private fun updateGpgKeyId(keyId: Long) {
@@ -82,13 +132,11 @@ class MainActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 		setSupportActionBar(findViewById(R.id.toolbar))
-		findViewById<TextView>(R.id.text_ssh_key).setText(
-			if (pref.getString(getString(R.string.key_ssh_key), null) == null) {
-				R.string.text_no_ssh_key
-			} else {
-				R.string.text_has_ssh_key
-			}
-		)
+		adaptor.keys = SshKeyInfo.load(this).toMutableList()
+		findViewById<RecyclerView>(R.id.recycler_ssh_keys).apply {
+			layoutManager = LinearLayoutManager(this@MainActivity)
+			adapter = adaptor
+		}
 		findViewById<TextView>(R.id.text_gpg_key).setText(
 			if (pref.getLong(getString(R.string.key_gpg_key), -1) == -1L) {
 				R.string.text_no_gpg_key
@@ -140,7 +188,7 @@ class MainActivity : AppCompatActivity() {
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		if (resultCode == RESULT_OK) {
 			when (requestCode) {
-				REQUEST_SELECT_SSH_KEY -> selectSshKeyCallback(sshApi?.executeApi(data!!) ?: return)
+				REQUEST_SELECT_SSH_KEY -> addSshKeyCallback(sshApi?.executeApi(data!!) ?: return)
 				REQUEST_SELECT_GPG_KEY -> selectGpgKeyCallback(
 					gpgApi?.executeApi(data!!, null, null) ?: return
 				)
@@ -148,8 +196,8 @@ class MainActivity : AppCompatActivity() {
 		}
 	}
 
-	fun selectSshKey(@Suppress("UNUSED_PARAMETER") view: View) {
-		selectSshKeyCallback(sshApi?.executeApi(KeySelectionRequest().toIntent()) ?: return)
+	fun addSshKey(@Suppress("UNUSED_PARAMETER") view: View) {
+		addSshKeyCallback(sshApi?.executeApi(KeySelectionRequest().toIntent()) ?: return)
 	}
 
 	fun selectGpgKey(@Suppress("UNUSED_PARAMETER") view: View) {

@@ -30,8 +30,7 @@ class SshAgentService : AgentService() {
 			socket = Socket("127.0.0.1", port)
 			val input = socket.getInputStream()
 			val output = socket.getOutputStream()
-			val keyId = getSharedPreferences(getString(R.string.pref_main), Context.MODE_PRIVATE)
-				.getString(getString(R.string.key_ssh_key), "") ?: ""
+			val keys = SshKeyInfo.load(this)
 			val lock = Semaphore(0)
 			var connRes = false
 			SshApi(this) { res ->
@@ -43,27 +42,31 @@ class SshAgentService : AgentService() {
 				lock.acquire()
 				check(connRes)
 				val executeApi = { reqIntent: Intent -> api.executeApi(reqIntent) }
+				val publicKeys = mutableListOf<SshPublicKeyInfo>()
+				for (key in keys) {
+					val resIntent = callApi(executeApi, SshPublicKeyRequest(key.id).toIntent(), port, null) ?: return
+					val pubKeyStr = SshPublicKeyResponse(resIntent).sshPublicKey
+					val info = SshPublicKeyInfo(
+						Base64.decode(
+							pubKeyStr.substring(pubKeyStr.indexOf(' ') + 1),
+							Base64.DEFAULT
+						),
+						key.description.toByteArray(Charsets.UTF_8)
+					)
+					publicKeys.add(info)
+				}
 				while (true) {
 					val req = SshAgentMessage.readFromStream(input) ?: break
 					val resMsg = when (req.type) {
 						SSH_AGENTC_REQUEST_IDENTITIES -> {
-							val resIntent =
-								callApi(executeApi, SshPublicKeyRequest(keyId).toIntent(), port, null)
-							if (resIntent != null) {
-								val pubKeyStr = SshPublicKeyResponse(resIntent).sshPublicKey
-								SshAgentMessage(
-									SSH_AGENT_IDENTITIES_ANSWER,
-									SshIdentitiesResponse(
-										Base64.decode(
-											pubKeyStr.substring(pubKeyStr.indexOf(' ') + 1),
-											Base64.DEFAULT
-										)
-									).toBytes()
-								)
-							} else null
+							SshAgentMessage(
+								SSH_AGENT_IDENTITIES_ANSWER,
+								SshIdentitiesResponse(publicKeys).toBytes()
+							)
 						}
 						SSH_AGENTC_SIGN_REQUEST -> {
 							val signReq = SshSignRequest(req.contents!!)
+							val keyId = keys[publicKeys.indexOfFirst { it.publicKey contentEquals signReq.keyBlob }].id
 							val resIntent = callApi(
 								executeApi,
 								SigningRequest(signReq.data, keyId, signReq.flags).toIntent(),
