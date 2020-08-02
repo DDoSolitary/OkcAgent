@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
-		<item name="windowActionBar">false</item>
-		<item name="windowNoTitle">true</item>
-		<item name="colorPrimary">#008577</item>
-		<item name="colorPrimaryDark">#00574B</item>
+	<style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+		<item name="colorPrimary">@color/primary</item>
+		<item name="colorPrimaryDark">@color/primary_dark</item>
 	</style>
 
-	<style name="AppTheme.Dialog" parent="Theme.MaterialComponents.Light.Dialog" />
+	<style name="AppTheme.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog">
+		<item name="colorPrimary">@color/primary</item>
+		<item name="colorPrimaryDark">@color/primary_dark</item>
+	</style>
 
 	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 </resources>
