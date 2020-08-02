@@ -121,11 +121,16 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	private fun updateGpgKeyId(keyId: Long) {
-		pref.edit().apply {
-			putLong(getString(R.string.key_gpg_key), keyId)
-			apply()
+		val prefEditor = pref.edit()
+		val gpgText = findViewById<TextView>(R.id.text_gpg_key)
+		if (keyId == 0L) {
+			prefEditor.remove(getString(R.string.key_gpg_key))
+			gpgText.text = getString(R.string.text_no_gpg_key)
+		} else {
+			prefEditor.putLong(getString(R.string.key_gpg_key), keyId)
+			gpgText.text = getString(R.string.text_has_gpg_key).format(keyId)
 		}
-		findViewById<TextView>(R.id.text_gpg_key).text = getString(R.string.text_has_gpg_key).format(keyId)
+		prefEditor.apply()
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
