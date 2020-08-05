@@ -32,7 +32,9 @@ This project consists of two components: the OkcAgent app, and command line util
 
 ### Command line utilities
 
-- [Stable releases](https://github.com/DDoSolitary/okc-agents/releases)
+- Stable releases
+  - Termux package: `pkg install okc-agents`
+  - [GitHub Releases](https://github.com/DDoSolitary/okc-agents/releases)
 - [Dev releases](https://dl.bintray.com/ddosolitary/dev-releases/okc-agents/)
 
 ## How to use
