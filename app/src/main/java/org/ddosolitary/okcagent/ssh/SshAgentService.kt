@@ -89,8 +89,9 @@ class SshAgentService : AgentService() {
 			Log.e(LOG_TAG, Log.getStackTraceString(e))
 			try {
 				socket?.setSoLinger(true, 0)
-			} catch (e: Exception) {
-				Log.w(LOG_TAG, "Failed to set linger option on exception: %s".format(e))
+			} catch (e2: Exception) {
+				Log.w(LOG_TAG, "Failed to set linger option on exception: %s".format(e2))
+				showError(this, e.toString())
 			}
 		} finally {
 			try {
