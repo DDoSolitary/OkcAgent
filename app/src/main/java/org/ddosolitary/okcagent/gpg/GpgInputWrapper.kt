@@ -7,6 +7,7 @@ import java.io.*
 import java.net.Socket
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.util.concurrent.locks.ReentrantLock
 
 class GpgInputWrapper(
 	private val port: Int,
@@ -90,6 +91,7 @@ class GpgInputWrapper(
 			private var tmpOutput: FileOutputStream? = tmpFile.outputStream()
 			private var position: Long = 0
 			private var reopened = false
+			private val lock = ReentrantLock()
 
 			override fun read(): Int {
 				val buf = ByteArray(1)
@@ -101,6 +103,9 @@ class GpgInputWrapper(
 			}
 
 			override fun read(b: ByteArray, off: Int, len: Int): Int {
+				if (!lock.isHeldByCurrentThread) {
+					lock.lock()
+				}
 				if (reopened && tmpInput == null) tmpInput = tmpFile.inputStream()
 				return if (position < tmpInput?.channel?.size() ?: 0) {
 					check(reopened)
@@ -125,14 +130,17 @@ class GpgInputWrapper(
 			}
 
 			override fun close() {
-				position = 0
-				if (!reopened) {
-					tmpOutput!!.close()
-					tmpOutput = null
-					reopened = true
-				} else {
-					tmpInput?.close()
-					tmpInput = null
+				if (lock.isHeldByCurrentThread) {
+					position = 0
+					if (!reopened) {
+						tmpOutput!!.close()
+						tmpOutput = null
+						reopened = true
+					} else {
+						tmpInput?.close()
+						tmpInput = null
+					}
+					lock.unlock()
 				}
 			}
 		}
