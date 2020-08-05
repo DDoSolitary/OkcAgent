@@ -15,7 +15,7 @@ import org.openintents.openpgp.OpenPgpSignatureResult
 import org.openintents.openpgp.util.OpenPgpApi.*
 import java.io.OutputStream
 import java.net.Socket
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.Semaphore
 
 const val EXTRA_GPG_ARGS = "org.ddosolitary.okcagent.extra.GPG_ARGS"
 private const val LOG_TAG = "GpgAgentService"

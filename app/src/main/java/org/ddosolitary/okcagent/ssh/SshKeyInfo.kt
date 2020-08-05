@@ -1,7 +1,6 @@
 package org.ddosolitary.okcagent.ssh
 
 import android.content.Context
-import android.content.SharedPreferences
 import com.beust.klaxon.Klaxon
 import org.ddosolitary.okcagent.R
 

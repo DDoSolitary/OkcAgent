@@ -1,6 +1,5 @@
 package org.ddosolitary.okcagent.ssh
 
-import android.content.Context
 import android.content.Intent
 import android.util.Base64
 import android.util.Log

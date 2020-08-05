@@ -119,7 +119,7 @@ abstract class AgentService : Service() {
 				getString(R.string.channel_id_auth),
 				getString(R.string.channel_auth),
 				NotificationManager.IMPORTANCE_HIGH
-			);
+			)
 			val mgr = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 			mgr.createNotificationChannel(serviceChannel)
 			mgr.createNotificationChannel(authChannel)
