@@ -160,9 +160,9 @@ class GpgAgentService : AgentService() {
 								}
 								Unit
 							}
-							args.options.containsKey("verify") -> {
+							args.options.containsKey("verify") || args.options.containsKey("decrypt") -> {
 								reqIntent.action = ACTION_DECRYPT_VERIFY
-								if (args.arguments.size > 1) {
+								if (args.options.containsKey("verify") && args.arguments.size > 1) {
 									reqIntent.putExtra(
 										EXTRA_DETACHED_SIGNATURE,
 										GpgInputWrapper(port, args.arguments[0], null).use { it.readBytes() }
@@ -181,36 +181,21 @@ class GpgAgentService : AgentService() {
 										controlOutput
 									)
 								) success = false
-								Unit
-							}
-							args.options.containsKey("decrypt") -> {
-								reqIntent.action = ACTION_DECRYPT_VERIFY
-								val resIntent = callApi(
-									{ api.executeApi(it, wrappedInput, output) },
-									reqIntent, port, inputStat
-								)
-								if (resIntent == null) {
-									success = false
-									return@runAgent
-								}
-								if (!handleSigResult(
-										resIntent.getParcelableExtra(RESULT_SIGNATURE)!!,
-										controlOutput
+								if (args.options.containsKey("decrypt")) {
+									val decRes: OpenPgpDecryptionResult =
+										resIntent.getParcelableExtra(RESULT_DECRYPTION)!!
+									val resStr = when (decRes.result) {
+										-1 -> "RESULT_NOT_ENCRYPTED"
+										0 -> "RESULT_INSECURE"
+										1 -> "RESULT_ENCRYPTED"
+										else -> "N/A"
+									}
+									if (decRes.result != 1) success = false
+									writeString(
+										controlOutput,
+										getString(R.string.msg_decryption_result).format(resStr)
 									)
-								) success = false
-								val decRes: OpenPgpDecryptionResult =
-									resIntent.getParcelableExtra(RESULT_DECRYPTION)!!
-								val resStr = when (decRes.result) {
-									-1 -> "RESULT_NOT_ENCRYPTED"
-									0 -> "RESULT_INSECURE"
-									1 -> "RESULT_ENCRYPTED"
-									else -> "N/A"
 								}
-								if (decRes.result != 1) success = false
-								writeString(
-									controlOutput,
-									getString(R.string.msg_decryption_result).format(resStr)
-								)
 							}
 							else -> throw Exception(getString(R.string.error_gpg_no_action))
 						}
