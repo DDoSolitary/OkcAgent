@@ -191,7 +191,6 @@ class GpgAgentService : AgentService() {
 										1 -> "RESULT_ENCRYPTED"
 										else -> "N/A"
 									}
-									if (decRes.result != 1) success = false
 									writeString(
 										controlOutput,
 										getString(R.string.msg_decryption_result).format(resStr)
