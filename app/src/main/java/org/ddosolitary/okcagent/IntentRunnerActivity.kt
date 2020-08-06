@@ -16,53 +16,41 @@ const val EXTRA_RESULT_INTENT = "org.ddosolitary.okcagent.extra.RESULT_INTENT"
 
 class IntentRunnerActivity : AppCompatActivity() {
 	class RequestsViewModel : ViewModel() {
-		var requestCode = 0
-		val requestMap = mutableMapOf<Int, Intent>()
+		var reqIntent: Intent? = null
 	}
 
 	private val vm by lazy { ViewModelProvider(this)[RequestsViewModel::class.java] }
 
-	private fun processIntent(intent: Intent) {
-		when (intent.action) {
-			ACTION_FINISH -> finish()
-			ACTION_RUN_PENDING_INTENT -> {
-				vm.requestMap[vm.requestCode] = intent.getParcelableExtra(EXTRA_CALLBACK_INTENT)!!
-				startIntentSenderForResult(
-					intent.getParcelableExtra<PendingIntent>(EXTRA_API_INTENT)!!.intentSender,
-					vm.requestCode++, null, 0, 0, 0
-				)
-			}
-		}
-	}
-
-	override fun onNewIntent(intent: Intent) {
-		super.onNewIntent(intent)
-		processIntent(intent)
-	}
-
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_intent_runner)
-		processIntent(intent)
+		when (intent.action) {
+			ACTION_RUN_PENDING_INTENT -> {
+				vm.reqIntent = intent
+				startIntentSenderForResult(
+					intent.getParcelableExtra<PendingIntent>(EXTRA_API_INTENT)!!.intentSender,
+					0, null, 0, 0, 0
+				)
+			}
+			else -> finish()
+		}
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
-		vm.requestMap[requestCode]?.let {
-			val res = if (resultCode == Activity.RESULT_OK) data!! else null
-			startService(it.apply { putExtra(EXTRA_RESULT_INTENT, res) })
-		}
-		vm.requestMap.remove(requestCode)
-		if (vm.requestMap.isEmpty()) finish()
+		val res = if (resultCode == Activity.RESULT_OK) data!! else null
+		val cbIntent = vm.reqIntent!!.getParcelableExtra<Intent>(EXTRA_CALLBACK_INTENT)!!
+		startService(cbIntent.apply { putExtra(EXTRA_RESULT_INTENT, res) })
+		vm.reqIntent = null
+		finish()
 	}
 
 	override fun onDestroy() {
 		if (!isChangingConfigurations) {
-			for ((_, intent) in vm.requestMap) {
-				startService(intent.apply { putExtra(EXTRA_RESULT_INTENT, null as Intent?) })
+			vm.reqIntent?.let {
+				val cbIntent = it.getParcelableExtra<Intent>(EXTRA_CALLBACK_INTENT)!!
+				startService(cbIntent.apply { putExtra(EXTRA_RESULT_INTENT, null as Intent?) })
 			}
-			vm.requestCode = 0
-			vm.requestMap.clear()
 		}
 		super.onDestroy()
 	}

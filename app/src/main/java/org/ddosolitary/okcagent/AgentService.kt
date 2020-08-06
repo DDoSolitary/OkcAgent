@@ -21,6 +21,10 @@ private const val EXTRA_RESULT_CODE = "result_code"
 private const val EXTRA_PENDING_INTENT = "intent"
 
 abstract class AgentService : Service() {
+	companion object {
+		val lockObj = Object()
+	}
+
 	private class NullableIntentHolder(val intent: Intent?)
 	private class ThreadContext(val thread: Thread, val queue: ArrayBlockingQueue<NullableIntentHolder>)
 	class StreamStatus(var exception: Exception?)
@@ -48,45 +52,52 @@ abstract class AgentService : Service() {
 	protected fun callApi(executeApi: (Intent) -> Intent?, req: Intent, port: Int, stat: StreamStatus?): Intent? {
 		var reqIntent = req
 		while (true) {
-			val resIntent = executeApi(reqIntent)!!
-			stat?.exception?.let { throw it }
-			when (resIntent.getIntExtra(EXTRA_RESULT_CODE, RESULT_CODE_ERROR)) {
-				RESULT_CODE_SUCCESS -> return resIntent
-				RESULT_CODE_USER_INTERACTION_REQUIRED -> {
-					val runnerIntent = Intent(this, IntentRunnerActivity::class.java).apply {
-						action = ACTION_RUN_PENDING_INTENT
-						flags = Intent.FLAG_ACTIVITY_NEW_TASK
-						putExtra(
-							EXTRA_API_INTENT,
-							resIntent.getParcelableExtra<PendingIntent>(EXTRA_PENDING_INTENT)
+			synchronized(lockObj) {
+				val resIntent = executeApi(reqIntent)!!
+				stat?.exception?.let { throw it }
+				when (resIntent.getIntExtra(EXTRA_RESULT_CODE, RESULT_CODE_ERROR)) {
+					RESULT_CODE_SUCCESS -> return resIntent
+					RESULT_CODE_USER_INTERACTION_REQUIRED -> {
+						val runnerIntent = Intent(this, IntentRunnerActivity::class.java).apply {
+							action = ACTION_RUN_PENDING_INTENT
+							flags = Intent.FLAG_ACTIVITY_NEW_TASK
+							putExtra(
+								EXTRA_API_INTENT,
+								resIntent.getParcelableExtra<PendingIntent>(EXTRA_PENDING_INTENT)
+							)
+							putExtra(
+								EXTRA_CALLBACK_INTENT,
+								Intent(this@AgentService, this@AgentService.javaClass).apply {
+									action = ACTION_RESULT_CALLBACK
+									putExtra(EXTRA_PROXY_PORT, port)
+								}
+							)
+						}
+						val pi = PendingIntent.getActivity(this, port, runnerIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+						val notification = NotificationCompat.Builder(this, getString(R.string.channel_id_auth))
+							.setPriority(NotificationCompat.PRIORITY_HIGH)
+							.setSmallIcon(R.drawable.ic_key)
+							.setContentTitle(getString(R.string.notification_auth_title))
+							.setContentText(getString(R.string.notification_auth_content))
+							.setStyle(
+								NotificationCompat.BigTextStyle().bigText(
+									getString(R.string.notification_auth_content)
+								)
+							)
+							.setAutoCancel(true)
+							.setOngoing(true)
+							.setContentIntent(pi)
+							.build()
+						(getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(
+							port,
+							notification
 						)
-						putExtra(
-							EXTRA_CALLBACK_INTENT,
-							Intent(this@AgentService, this@AgentService.javaClass).apply {
-								action = ACTION_RESULT_CALLBACK
-								putExtra(EXTRA_PROXY_PORT, port)
-							}
-						)
+						reqIntent = threadMap[port]!!.queue.take().intent ?: return null
 					}
-					val pi = PendingIntent.getActivity(this, port, runnerIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-					val notification = NotificationCompat.Builder(this, getString(R.string.channel_id_auth))
-						.setPriority(NotificationCompat.PRIORITY_HIGH)
-						.setSmallIcon(R.drawable.ic_key)
-						.setContentTitle(getString(R.string.notification_auth_title))
-						.setContentText(getString(R.string.notification_auth_content))
-						.setStyle(NotificationCompat.BigTextStyle().bigText(
-							getString(R.string.notification_auth_content)
-						))
-						.setAutoCancel(true)
-						.setOngoing(true)
-						.setContentIntent(pi)
-						.build()
-					(getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(port, notification)
-					reqIntent = threadMap[port]!!.queue.take().intent ?: return null
-				}
-				RESULT_CODE_ERROR -> {
-					showError(this, getErrorMessage(resIntent) ?: getString(R.string.error_api))
-					return null
+					RESULT_CODE_ERROR -> {
+						showError(this, getErrorMessage(resIntent) ?: getString(R.string.error_api))
+						return null
+					}
 				}
 			}
 		}
