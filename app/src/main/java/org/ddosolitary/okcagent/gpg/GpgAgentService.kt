@@ -168,8 +168,9 @@ class GpgAgentService : AgentService() {
 										GpgInputWrapper(port, args.arguments[0], null).use { it.readBytes() }
 									)
 								}
+								val apiOutput = if (args.options.containsKey("decrypt")) output else null
 								val resIntent = callApi(
-									{ api.executeApi(it, wrappedInput, output) },
+									{ api.executeApi(it, wrappedInput, apiOutput) },
 									reqIntent, port, inputStat
 								)
 								if (resIntent == null) {
