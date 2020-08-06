@@ -1,2 +1,6 @@
 -keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable
+-keep public class com.beust.klaxon.*Converter { public <methods>; }
+-keep interface com.beust.klaxon.Converter { public <methods>; }
+-keep class kotlin.Metadata { public <methods>; }
+-keep class org.ddosolitary.okcagent.ssh.SshKeyInfo { public <methods>; }
