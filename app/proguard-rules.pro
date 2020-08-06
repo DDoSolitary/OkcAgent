@@ -4,3 +4,4 @@
 -keep interface com.beust.klaxon.Converter { public <methods>; }
 -keep class kotlin.Metadata { public <methods>; }
 -keep class org.ddosolitary.okcagent.ssh.SshKeyInfo { public <methods>; }
+-keep class org.openintents.openpgp.* implements android.os.Parcelable {}
