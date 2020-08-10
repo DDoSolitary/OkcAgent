@@ -1,20 +1,24 @@
 package org.ddosolitary.okcagent.ssh
 
 import android.content.Context
-import com.beust.klaxon.Klaxon
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.list
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 import org.ddosolitary.okcagent.R
 
-class SshKeyInfo(val id: String, val description: String) {
+@Serializable
+data class SshKeyInfo(val id: String, val description: String) {
 	companion object {
 		fun load(context: Context): List<SshKeyInfo> {
 			val pref = context.getSharedPreferences(context.getString(R.string.pref_main), Context.MODE_PRIVATE)
 			val json = pref.getString(context.getString(R.string.key_ssh_keys), null) ?: "[]"
-			return Klaxon().parseArray(json)!!
+			return Json(JsonConfiguration.Stable).parse(serializer().list, json)
 		}
 
 		fun save(list: List<SshKeyInfo>, context: Context) {
 			val pref = context.getSharedPreferences(context.getString(R.string.pref_main), Context.MODE_PRIVATE)
-			val json = Klaxon().toJsonString(list)
+			val json = Json(JsonConfiguration.Stable).stringify(serializer().list, list)
 			pref.edit().apply {
 				putString(context.getString(R.string.key_ssh_keys), json)
 				apply()
