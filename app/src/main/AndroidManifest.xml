@@ -11,6 +11,7 @@
 	</queries>
 
 	<application
+		android:name=".MyApplication"
 		android:allowBackup="true"
 		android:fullBackupContent="true"
 		android:icon="@mipmap/ic_launcher"
@@ -51,12 +52,16 @@
 		<activity
 			android:name=".IntentRunnerActivity"
 			android:launchMode="singleInstance"
-			android:theme="@style/AppTheme.Dialog"/>
+			android:theme="@style/AppTheme.Dialog" />
 		<activity
 			android:name=".ErrorDialogActivity"
 			android:taskAffinity=""
 			android:excludeFromRecents="true"
 			android:theme="@style/AppTheme.Dialog" />
+
+		<meta-data
+			android:name="com.bugsnag.android.API_KEY"
+			android:value="c496f0ee52d0394718d46bd1113a0b9b" />
 	</application>
 
 </manifest>

@@ -3,7 +3,7 @@ package org.ddosolitary.okcagent.ssh
 import android.content.Intent
 import android.util.Base64
 import android.util.Log
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.bugsnag.android.Bugsnag
 import org.ddosolitary.okcagent.AgentService
 import org.ddosolitary.okcagent.R
 import org.ddosolitary.okcagent.showError
@@ -85,7 +85,7 @@ class SshAgentService : AgentService() {
 				}
 			}
 		} catch (e: Exception) {
-			FirebaseCrashlytics.getInstance().recordException(e)
+			Bugsnag.notify(e)
 			Log.e(LOG_TAG, Log.getStackTraceString(e))
 			try {
 				socket?.setSoLinger(true, 0)
