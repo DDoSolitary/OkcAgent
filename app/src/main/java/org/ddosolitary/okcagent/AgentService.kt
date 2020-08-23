@@ -73,25 +73,34 @@ abstract class AgentService : Service() {
 								}
 							)
 						}
-						val pi = PendingIntent.getActivity(this, port, runnerIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-						val notification = NotificationCompat.Builder(this, getString(R.string.channel_id_auth))
-							.setPriority(NotificationCompat.PRIORITY_HIGH)
-							.setSmallIcon(R.drawable.ic_key)
-							.setContentTitle(getString(R.string.notification_auth_title))
-							.setContentText(getString(R.string.notification_auth_content))
-							.setStyle(
-								NotificationCompat.BigTextStyle().bigText(
-									getString(R.string.notification_auth_content)
-								)
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+							val pi = PendingIntent.getActivity(
+								this,
+								port,
+								runnerIntent,
+								PendingIntent.FLAG_UPDATE_CURRENT
 							)
-							.setAutoCancel(true)
-							.setOngoing(true)
-							.setContentIntent(pi)
-							.build()
-						(getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(
-							port,
-							notification
-						)
+							val notification = NotificationCompat.Builder(this, getString(R.string.channel_id_auth))
+								.setPriority(NotificationCompat.PRIORITY_HIGH)
+								.setSmallIcon(R.drawable.ic_key)
+								.setContentTitle(getString(R.string.notification_auth_title))
+								.setContentText(getString(R.string.notification_auth_content))
+								.setStyle(
+									NotificationCompat.BigTextStyle().bigText(
+										getString(R.string.notification_auth_content)
+									)
+								)
+								.setAutoCancel(true)
+								.setOngoing(true)
+								.setContentIntent(pi)
+								.build()
+							(getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(
+								port,
+								notification
+							)
+						} else {
+							startActivity(runnerIntent)
+						}
 						reqIntent = threadMap[port]!!.queue.take().intent ?: return null
 					}
 					RESULT_CODE_ERROR -> {
