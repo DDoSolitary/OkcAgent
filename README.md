@@ -28,14 +28,14 @@ This project consists of two components: the OkcAgent app, and command line util
   - [GitHub Releases](https://github.com/DDoSolitary/OkcAgent/releases)
   - [Google Play Store](https://play.google.com/store/apps/details?id=org.ddosolitary.okcagent)
   - [F-Droid](https://f-droid.org/packages/org.ddosolitary.okcagent/)
-- [Dev releases](https://dl.bintray.com/ddosolitary/dev-releases/OkcAgent/)
+- [Dev releases](https://ddosolitary-builds.sourceforge.io/OkcAgent/)
 
 ### Command line utilities
 
 - Stable releases
   - Termux package: `pkg install okc-agents`
   - [GitHub Releases](https://github.com/DDoSolitary/okc-agents/releases)
-- [Dev releases](https://dl.bintray.com/ddosolitary/dev-releases/okc-agents/)
+- [Dev releases](https://ddosolitary-builds.sourceforge.io/okc-agents/)
 
 ## How to use
 
