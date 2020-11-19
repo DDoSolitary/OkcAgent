@@ -57,7 +57,7 @@ class GpgArguments(
 
 		private fun setOption(options: MutableMap<String, String?>, name: String, value: String?) {
 			if (name == "recipient" && options.containsKey(name) && value != null) {
-				options[name] = "%s\u0000%s".format(options[name], value);
+				options[name] = "%s\u0000%s".format(options[name], value)
 			} else {
 				options[name] = value
 			}
