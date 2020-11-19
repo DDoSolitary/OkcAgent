@@ -131,7 +131,7 @@ class GpgAgentService : AgentService() {
 										val userIds = mutableListOf<String>()
 										for (r in recipient.split('\u0000')) {
 											if (Regex("^[0-9a-zA-Z]{16}$").matches(r)) {
-												keyIds.add(r.toLong(16))
+												keyIds.add(r.toULong(16).toLong())
 											} else {
 												userIds.add(r)
 											}
