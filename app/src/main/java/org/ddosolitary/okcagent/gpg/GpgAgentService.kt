@@ -129,9 +129,11 @@ class GpgAgentService : AgentService() {
 									} else {
 										val keyIds = mutableListOf<Long>()
 										val userIds = mutableListOf<String>()
+										val pattern = Regex("^(?:0x)?([0-9a-zA-Z]{16})$")
 										for (r in recipient.split('\u0000')) {
-											if (Regex("^[0-9a-zA-Z]{16}$").matches(r)) {
-												keyIds.add(r.toULong(16).toLong())
+											val match = pattern.find(r)
+											if (match != null) {
+												keyIds.add(match.groupValues[1].toULong(16).toLong())
 											} else {
 												userIds.add(r)
 											}
