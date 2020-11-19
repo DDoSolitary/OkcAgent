@@ -5,10 +5,10 @@ buildscript {
 		jcenter()
 	}
 	dependencies {
-		classpath 'com.android.tools.build:gradle:4.0.1'
+		classpath 'com.android.tools.build:gradle:4.1.1'
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 		classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
-		classpath "com.bugsnag:bugsnag-android-gradle-plugin:5.2.0"
+		classpath "com.bugsnag:bugsnag-android-gradle-plugin:5.4.0"
 	}
 }
 
