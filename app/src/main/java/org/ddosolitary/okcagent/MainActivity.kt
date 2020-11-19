@@ -191,6 +191,7 @@ class MainActivity : AppCompatActivity() {
 
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		super.onActivityResult(requestCode, resultCode, data)
 		if (resultCode == RESULT_OK) {
 			when (requestCode) {
 				REQUEST_SELECT_SSH_KEY -> addSshKeyCallback(sshApi?.executeApi(data!!) ?: return)
