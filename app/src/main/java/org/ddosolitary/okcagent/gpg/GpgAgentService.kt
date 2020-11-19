@@ -17,10 +17,12 @@ import java.io.OutputStream
 import java.net.Socket
 import java.util.concurrent.Semaphore
 
-const val EXTRA_GPG_ARGS = "org.ddosolitary.okcagent.extra.GPG_ARGS"
-private const val LOG_TAG = "GpgAgentService"
-
 class GpgAgentService : AgentService() {
+	companion object {
+		const val EXTRA_GPG_ARGS = "org.ddosolitary.okcagent.extra.GPG_ARGS"
+		private const val LOG_TAG = "GpgAgentService"
+	}
+
 	private fun handleSigResult(res: OpenPgpSignatureResult, output: OutputStream): Boolean {
 		val resStr = when (res.result) {
 			-1 -> "RESULT_NO_SIGNATURE"

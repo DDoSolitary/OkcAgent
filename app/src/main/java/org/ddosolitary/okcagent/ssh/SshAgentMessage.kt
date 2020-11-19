@@ -7,14 +7,14 @@ import java.io.OutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-const val SSH_AGENT_FAILURE: UByte = 5u
-const val SSH_AGENTC_REQUEST_IDENTITIES: UByte = 11u
-const val SSH_AGENT_IDENTITIES_ANSWER: UByte = 12u
-const val SSH_AGENTC_SIGN_REQUEST: UByte = 13u
-const val SSH_AGENT_SIGN_RESPONSE: UByte = 14u
-
 class SshAgentMessage(val type: UByte, val contents: ByteArray?) {
 	companion object {
+		const val SSH_AGENT_FAILURE: UByte = 5u
+		const val SSH_AGENTC_REQUEST_IDENTITIES: UByte = 11u
+		const val SSH_AGENT_IDENTITIES_ANSWER: UByte = 12u
+		const val SSH_AGENTC_SIGN_REQUEST: UByte = 13u
+		const val SSH_AGENT_SIGN_RESPONSE: UByte = 14u
+
 		@Suppress("UsePropertyAccessSyntax")
 		fun readFromStream(stream: InputStream): SshAgentMessage? {
 			val len = ByteBuffer.wrap(readExact(stream, Int.SIZE_BYTES) ?: return null).apply {

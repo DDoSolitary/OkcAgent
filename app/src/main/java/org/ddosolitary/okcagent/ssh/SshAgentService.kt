@@ -16,9 +16,11 @@ import org.openintents.ssh.authentication.response.SshPublicKeyResponse
 import java.net.Socket
 import java.util.concurrent.Semaphore
 
-private const val LOG_TAG = "SshAgentService"
-
 class SshAgentService : AgentService() {
+	companion object {
+		private const val LOG_TAG = "SshAgentService"
+	}
+
 	override fun getErrorMessage(intent: Intent): String? {
 		return intent.getParcelableExtra<SshAuthenticationApiError>(EXTRA_ERROR)?.message
 	}
@@ -57,13 +59,13 @@ class SshAgentService : AgentService() {
 				while (true) {
 					val req = SshAgentMessage.readFromStream(input) ?: break
 					val resMsg = when (req.type) {
-						SSH_AGENTC_REQUEST_IDENTITIES -> {
+						SshAgentMessage.SSH_AGENTC_REQUEST_IDENTITIES -> {
 							SshAgentMessage(
-								SSH_AGENT_IDENTITIES_ANSWER,
+								SshAgentMessage.SSH_AGENT_IDENTITIES_ANSWER,
 								SshIdentitiesResponse(publicKeys).toBytes()
 							)
 						}
-						SSH_AGENTC_SIGN_REQUEST -> {
+						SshAgentMessage.SSH_AGENTC_SIGN_REQUEST -> {
 							val signReq = SshSignRequest(req.contents!!)
 							val keyId = keys[publicKeys.indexOfFirst { it.publicKey contentEquals signReq.keyBlob }].id
 							val resIntent = callApi(
@@ -74,14 +76,14 @@ class SshAgentService : AgentService() {
 							)
 							if (resIntent != null) {
 								SshAgentMessage(
-									SSH_AGENT_SIGN_RESPONSE,
+									SshAgentMessage.SSH_AGENT_SIGN_RESPONSE,
 									SshSignResponse(SigningResponse(resIntent).signature).toBytes()
 								)
 							} else null
 						}
 						else -> null
 					}
-					(resMsg ?: SshAgentMessage(SSH_AGENT_FAILURE, null)).writeToStream(output)
+					(resMsg ?: SshAgentMessage(SshAgentMessage.SSH_AGENT_FAILURE, null)).writeToStream(output)
 				}
 			}
 		} catch (e: Exception) {

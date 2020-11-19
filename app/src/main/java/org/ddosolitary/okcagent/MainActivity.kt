@@ -19,15 +19,23 @@ import org.ddosolitary.okcagent.gpg.GpgApi
 import org.ddosolitary.okcagent.ssh.SshApi
 import org.ddosolitary.okcagent.ssh.SshKeyInfo
 import org.openintents.openpgp.OpenPgpError
-import org.openintents.openpgp.util.OpenPgpApi.*
+import org.openintents.openpgp.util.OpenPgpApi
+import org.openintents.openpgp.util.OpenPgpApi.ACTION_GET_SIGN_KEY_ID
+import org.openintents.openpgp.util.OpenPgpApi.EXTRA_SIGN_KEY_ID
+import org.openintents.openpgp.util.OpenPgpApi.RESULT_CODE
+import org.openintents.openpgp.util.OpenPgpApi.RESULT_ERROR
+import org.openintents.openpgp.util.OpenPgpApi.RESULT_INTENT
+import org.openintents.ssh.authentication.SshAuthenticationApi
 import org.openintents.ssh.authentication.request.KeySelectionRequest
 import org.openintents.ssh.authentication.response.KeySelectionResponse
 
 
-private const val REQUEST_SELECT_SSH_KEY = 1
-private const val REQUEST_SELECT_GPG_KEY = 2
-
 class MainActivity : AppCompatActivity() {
+	companion object {
+		private const val REQUEST_SELECT_SSH_KEY = 1
+		private const val REQUEST_SELECT_GPG_KEY = 2
+	}
+
 	private class SshKeyViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
 	private class SshKeyListAdaptor : RecyclerView.Adapter<SshKeyViewHolder>() {
@@ -75,12 +83,12 @@ class MainActivity : AppCompatActivity() {
 	private fun addSshKeyCallback(intent: Intent) {
 		val res = KeySelectionResponse(intent)
 		when (res.resultCode) {
-			RESULT_CODE_SUCCESS -> addSshKey(SshKeyInfo(res.keyId, res.keyDescription))
-			RESULT_CODE_ERROR -> showError(
+			SshAuthenticationApi.RESULT_CODE_SUCCESS -> addSshKey(SshKeyInfo(res.keyId, res.keyDescription))
+			SshAuthenticationApi.RESULT_CODE_ERROR -> showError(
 				this@MainActivity,
 				res.error?.message ?: getString(R.string.error_api)
 			)
-			RESULT_CODE_USER_INTERACTION_REQUIRED -> startIntentSenderForResult(
+			SshAuthenticationApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> startIntentSenderForResult(
 				res.pendingIntent.intentSender, REQUEST_SELECT_SSH_KEY,
 				null, 0, 0, 0
 			)
@@ -89,13 +97,13 @@ class MainActivity : AppCompatActivity() {
 
 	private fun selectGpgKeyCallback(intent: Intent) {
 		when (intent.getIntExtra(RESULT_CODE, -1)) {
-			RESULT_CODE_SUCCESS -> updateGpgKeyId(intent.getLongExtra(EXTRA_SIGN_KEY_ID, -1))
-			RESULT_CODE_ERROR -> showError(
+			OpenPgpApi.RESULT_CODE_SUCCESS -> updateGpgKeyId(intent.getLongExtra(EXTRA_SIGN_KEY_ID, -1))
+			OpenPgpApi.RESULT_CODE_ERROR -> showError(
 				this@MainActivity,
 				intent.getParcelableExtra<OpenPgpError>(RESULT_ERROR)?.message
 					?: getString(R.string.error_api)
 			)
-			RESULT_CODE_USER_INTERACTION_REQUIRED -> startIntentSenderForResult(
+			OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> startIntentSenderForResult(
 				intent.getParcelableExtra<PendingIntent>(RESULT_INTENT)!!.intentSender,
 				REQUEST_SELECT_GPG_KEY,
 				null,

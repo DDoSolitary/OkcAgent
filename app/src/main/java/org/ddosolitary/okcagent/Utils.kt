@@ -20,7 +20,7 @@ fun showError(context: Context, msg: String) {
 	if (context is Activity) {
 		context.startActivity(Intent(context, ErrorDialogActivity::class.java).apply {
 			flags = Intent.FLAG_ACTIVITY_NEW_TASK
-			putExtra(EXTRA_ERROR_MESSAGE, msg)
+			putExtra(ErrorDialogActivity.EXTRA_ERROR_MESSAGE, msg)
 		})
 	} else {
 		val mgr = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

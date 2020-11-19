@@ -8,13 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-const val ACTION_RUN_PENDING_INTENT = "org.ddosolitary.okcagent.action.RUN_PENDING_INTENT"
-const val ACTION_FINISH = "org.ddosolitary.okcagent.action.FINISH"
-const val EXTRA_API_INTENT = "org.ddosolitary.okcagent.extra.API_INTENT"
-const val EXTRA_CALLBACK_INTENT = "org.ddosolitary.okcagent.extra.CALLBACK_INTENT"
-const val EXTRA_RESULT_INTENT = "org.ddosolitary.okcagent.extra.RESULT_INTENT"
-
 class IntentRunnerActivity : AppCompatActivity() {
+	companion object {
+		const val ACTION_RUN_PENDING_INTENT = "org.ddosolitary.okcagent.action.RUN_PENDING_INTENT"
+		const val ACTION_FINISH = "org.ddosolitary.okcagent.action.FINISH"
+		const val EXTRA_API_INTENT = "org.ddosolitary.okcagent.extra.API_INTENT"
+		const val EXTRA_CALLBACK_INTENT = "org.ddosolitary.okcagent.extra.CALLBACK_INTENT"
+		const val EXTRA_RESULT_INTENT = "org.ddosolitary.okcagent.extra.RESULT_INTENT"
+	}
+
 	class RequestsViewModel : ViewModel() {
 		var reqIntent: Intent? = null
 	}

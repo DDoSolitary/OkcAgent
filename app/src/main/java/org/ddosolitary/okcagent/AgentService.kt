@@ -10,18 +10,18 @@ import androidx.core.app.NotificationCompat
 import java.util.concurrent.ArrayBlockingQueue
 import kotlin.concurrent.thread
 
-const val ACTION_RUN_AGENT = "org.ddosolitary.okcagent.action.RUN_AGENT"
-const val EXTRA_PROXY_PORT = "org.ddosolitary.okcagent.extra.PROXY_PORT"
-const val RESULT_CODE_ERROR = 0
-const val RESULT_CODE_SUCCESS = 1
-const val RESULT_CODE_USER_INTERACTION_REQUIRED = 2
-private const val ACTION_RESULT_CALLBACK = "org.ddosolitary.okcagent.action.RESULT_CALLBACK"
-private const val ACTION_TERMINATE_SERVICE = "org.ddosolitary.okcagent.action.TERMINATE_SERVICE"
-private const val EXTRA_RESULT_CODE = "result_code"
-private const val EXTRA_PENDING_INTENT = "intent"
-
 abstract class AgentService : Service() {
 	companion object {
+		const val ACTION_RUN_AGENT = "org.ddosolitary.okcagent.action.RUN_AGENT"
+		const val EXTRA_PROXY_PORT = "org.ddosolitary.okcagent.extra.PROXY_PORT"
+		private const val RESULT_CODE_ERROR = 0
+		private const val RESULT_CODE_SUCCESS = 1
+		private const val RESULT_CODE_USER_INTERACTION_REQUIRED = 2
+		private const val ACTION_RESULT_CALLBACK = "org.ddosolitary.okcagent.action.RESULT_CALLBACK"
+		private const val ACTION_TERMINATE_SERVICE = "org.ddosolitary.okcagent.action.TERMINATE_SERVICE"
+		private const val EXTRA_RESULT_CODE = "result_code"
+		private const val EXTRA_PENDING_INTENT = "intent"
+
 		val lockObj = Object()
 	}
 
@@ -59,14 +59,14 @@ abstract class AgentService : Service() {
 					RESULT_CODE_SUCCESS -> return resIntent
 					RESULT_CODE_USER_INTERACTION_REQUIRED -> {
 						val runnerIntent = Intent(this, IntentRunnerActivity::class.java).apply {
-							action = ACTION_RUN_PENDING_INTENT
+							action = IntentRunnerActivity.ACTION_RUN_PENDING_INTENT
 							flags = Intent.FLAG_ACTIVITY_NEW_TASK
 							putExtra(
-								EXTRA_API_INTENT,
+								IntentRunnerActivity.EXTRA_API_INTENT,
 								resIntent.getParcelableExtra<PendingIntent>(EXTRA_PENDING_INTENT)
 							)
 							putExtra(
-								EXTRA_CALLBACK_INTENT,
+								IntentRunnerActivity.EXTRA_CALLBACK_INTENT,
 								Intent(this@AgentService, this@AgentService.javaClass).apply {
 									action = ACTION_RESULT_CALLBACK
 									putExtra(EXTRA_PROXY_PORT, port)
@@ -157,8 +157,9 @@ abstract class AgentService : Service() {
 					)
 				} else checkServiceExit()
 			}
-			ACTION_RESULT_CALLBACK -> threadMap[port]?.queue
-				?.put(NullableIntentHolder(intent.getParcelableExtra(EXTRA_RESULT_INTENT))) ?: checkServiceExit()
+			ACTION_RESULT_CALLBACK -> threadMap[port]?.queue?.put(
+				NullableIntentHolder(intent.getParcelableExtra(IntentRunnerActivity.EXTRA_RESULT_INTENT))
+			) ?: checkServiceExit()
 			ACTION_TERMINATE_SERVICE -> stopSelf()
 		}
 		return START_NOT_STICKY
@@ -168,7 +169,7 @@ abstract class AgentService : Service() {
 		exited = true
 		startActivity(Intent(this, IntentRunnerActivity::class.java).apply {
 			flags = Intent.FLAG_ACTIVITY_NEW_TASK
-			action = ACTION_FINISH
+			action = IntentRunnerActivity.ACTION_FINISH
 		})
 		for ((_, ctx) in threadMap) {
 			ctx.thread.interrupt()
