@@ -2,8 +2,10 @@
 	<string name="app_name">OkcAgent</string>
 	<string name="button_add_ssh_key">Add SSH Key</string>
 	<string name="button_install">Install Now</string>
+	<string name="button_no">No</string>
 	<string name="button_ok">OK</string>
 	<string name="button_remove">Remove</string>
+	<string name="button_yes">Yes</string>
 	<string name="button_select_gpg_key">Select GPG Key</string>
 	<string name="channel_auth">Authorization requests</string>
 	<string name="channel_error">Errors</string>
@@ -29,10 +31,13 @@
 	<string name="notification_ssh_content">Serving SSH agent requests&#8230;</string>
 	<string name="notification_ssh_title">SSH Agent Service</string>
 	<string name="text_error">Error</string>
+	<string name="text_error_reporting">Automatic error reporting</string>
+	<string name="text_error_reporting_message">This app uses the error reporting tools from Bugsnag, which will automatically send error reports to Bugsnag\'s servers when an error occurs or the app crashes. The reports contains some technical information to help the developer to diagnose and fix the errors. No personally identifiable information is collected.\nDo you want to enable automatic error reporting? You can always toggle this feature in settings later.</string>
 	<string name="text_has_gpg_key">GPG key selected: 0x<xliff:g>%016X</xliff:g></string>
 	<string name="text_no_gpg_key">No valid GPG key selected.</string>
 	<string name="text_no_provider">The OpenKeychain app, which this app relies upon, is not installed on this device. You need to install OpenKeychain before being able to use this app.</string>
 	<string name="text_no_ssh_key">No valid SSH key selected.</string>
+	<string name="text_settings">Settings</string>
 	<string name="text_terminate">Terminate</string>
 	<string name="text_waiting_provider">Waiting for crypto provider&#8230;</string>
 </resources>

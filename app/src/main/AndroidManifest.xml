@@ -58,6 +58,10 @@
 			android:taskAffinity=""
 			android:excludeFromRecents="true"
 			android:theme="@style/AppTheme.Dialog" />
+		<activity
+			android:name=".SettingsActivity"
+			android:label="@string/text_settings"
+			android:theme="@style/AppTheme" />
 
 		<meta-data
 			android:name="com.bugsnag.android.API_KEY"

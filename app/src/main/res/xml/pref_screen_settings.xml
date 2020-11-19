@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+	<SwitchPreferenceCompat
+		app:key="@string/key_error_reporting"
+		app:icon="@drawable/ic_bug_report"
+		app:title="@string/text_error_reporting" />
+</androidx.preference.PreferenceScreen>

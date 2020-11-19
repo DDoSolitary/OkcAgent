@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="key_error_reporting" translatable="false">ERROR_REPORTING</string>
 	<string name="key_gpg_key" translatable="false">GPG_KEY_ID</string>
 	<string name="key_ssh_keys" translatable="false">SSH_KEYS</string>
 	<string name="channel_id_auth" translatable="false">NOTIFICATION_CHANNEL_AUTH</string>
