@@ -45,6 +45,20 @@ This project consists of two components: the OkcAgent app, and command line util
     - `okc-ssh-agent` acts as an SSH agent. You can specify path of the agent socket with its first argument, and set `SSH_AUTH_SOCK` to that path to inform programs like `ssh` to connect to it.
     - `okc-gpg` supports a limited set of GPG options so you can use it to perform some crypto operations. Read [GpgArguments.kt](https://github.com/DDoSolitary/OkcAgent/blob/master/app/src/main/java/org/ddosolitary/okcagent/gpg/GpgArguments.kt) for a complete list of supported options.
 
+### Starting okc-ssh-agent automatically
+
+Like the normal `ssh-agent`, `okc-ssh-agent` needs to be started first to allow SSH clients to connect to it, and it will by handy to have it started automatically. You can put some startup script in `~/.bashrc` or `~/.profile` to start the agent when you open a new shell.
+
+For v0.1.1 and earlier versions (of the command line tools, not the OkcAgent app), you need to spefify socket path as its first argument. Take a look at [this issue](https://github.com/DDoSolitary/okc-agents/issues/2) for details.
+
+Starting from v0.1.2, `okc-ssh-agent` supports most command line options of `ssh-agent`, so you can use the same script for `ssh-agent` to start `okc-ssh-agent`. For example, the following script will start `okc-ssh-agent` if there isn't one already running and then setup environment variables.
+
+```bash
+if ! pgrep okc-ssh-agent > /dev/null; then
+	okc-ssh-agent > "$PREFIX/tmp/okc-ssh-agent.env"
+fi
+source "$PREFIX/tmp/okc-ssh-agent.env"
+```
 
 ## Notes about the app
 
