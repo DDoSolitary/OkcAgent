@@ -47,7 +47,7 @@ This project consists of two components: the OkcAgent app, and command line util
 
 ### Starting okc-ssh-agent automatically
 
-Like the normal `ssh-agent`, `okc-ssh-agent` needs to be started first to allow SSH clients to connect to it, and it will by handy to have it started automatically. You can put some startup script in `~/.bashrc` or `~/.profile` to start the agent when you open a new shell.
+Like the normal `ssh-agent`, `okc-ssh-agent` needs to be started first to allow SSH clients to connect to it, and it will be handy to have it started automatically. You can put some startup script in `~/.bashrc` or `~/.profile` to start the agent when you open a new shell.
 
 For v0.1.1 and earlier versions (of the command line tools, not the OkcAgent app), you need to spefify socket path as its first argument. Take a look at [this issue](https://github.com/DDoSolitary/okc-agents/issues/2) for details.
 
