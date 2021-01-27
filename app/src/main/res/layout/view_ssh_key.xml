@@ -5,11 +5,23 @@
 	android:layout_height="wrap_content"
 	android:layout_margin="@dimen/margin">
 
+	<ImageView
+		android:id="@+id/img_drag_handle"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/margin"
+		android:src="@drawable/ic_drag_handle"
+		android:contentDescription="@string/img_drag_handle"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toStartOf="@id/text_ssh_key"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent" />
+
 	<com.google.android.material.textview.MaterialTextView
 		android:id="@+id/text_ssh_key"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintStart_toStartOf="@id/img_drag_handle"
 		app:layout_constraintEnd_toStartOf="@id/button_remove"
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintBottom_toBottomOf="parent" />

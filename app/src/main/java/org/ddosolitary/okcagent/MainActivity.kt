@@ -1,5 +1,6 @@
 package org.ddosolitary.okcagent
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -9,10 +10,11 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -29,6 +31,7 @@ import org.openintents.openpgp.util.OpenPgpApi.RESULT_INTENT
 import org.openintents.ssh.authentication.SshAuthenticationApi
 import org.openintents.ssh.authentication.request.KeySelectionRequest
 import org.openintents.ssh.authentication.response.KeySelectionResponse
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,8 +42,10 @@ class MainActivity : AppCompatActivity() {
 
 	private class SshKeyViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
-	private class SshKeyListAdaptor : RecyclerView.Adapter<SshKeyViewHolder>() {
-		var keys = mutableListOf<SshKeyInfo>()
+	private class SshKeyListAdaptor(
+		private val touchHelper: ItemTouchHelper,
+		var keys: MutableList<SshKeyInfo>,
+	) : RecyclerView.Adapter<SshKeyViewHolder>() {
 
 		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SshKeyViewHolder {
 			val view = LayoutInflater.from(parent.context).inflate(R.layout.view_ssh_key, parent, false)
@@ -51,6 +56,7 @@ class MainActivity : AppCompatActivity() {
 			return if (keys.size == 0) 1 else keys.size
 		}
 
+		@SuppressLint("ClickableViewAccessibility")
 		override fun onBindViewHolder(holder: SshKeyViewHolder, position: Int) {
 			val textView = holder.view.findViewById<TextView>(R.id.text_ssh_key)
 			val button = holder.view.findViewById<ImageButton>(R.id.button_remove)
@@ -71,6 +77,12 @@ class MainActivity : AppCompatActivity() {
 					}
 				}
 			}
+			holder.view.findViewById<ImageView>(R.id.img_drag_handle).setOnTouchListener { _, event ->
+				if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+					touchHelper.startDrag(holder)
+				}
+				false
+			}
 		}
 	}
 
@@ -79,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 	}
 	private var sshApi: SshApi? = null
 	private var gpgApi: GpgApi? = null
-	private val adaptor = SshKeyListAdaptor()
+	private lateinit var adaptor: SshKeyListAdaptor
 
 	private fun addSshKeyCallback(intent: Intent) {
 		val res = KeySelectionResponse(intent)
@@ -146,11 +158,35 @@ class MainActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 		setSupportActionBar(findViewById(R.id.toolbar))
-		adaptor.keys = SshKeyInfo.load(this).toMutableList()
+
+		val touchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
+			override fun isItemViewSwipeEnabled(): Boolean = false
+			override fun isLongPressDragEnabled(): Boolean = false
+			override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int =
+				makeMovementFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0)
+
+			override fun onMove(
+				recyclerView: RecyclerView,
+				viewHolder: RecyclerView.ViewHolder,
+				target: RecyclerView.ViewHolder
+			): Boolean {
+				val srcPos = viewHolder.adapterPosition
+				val dstPos = target.adapterPosition
+				Collections.swap(adaptor.keys, srcPos, dstPos)
+				SshKeyInfo.save(adaptor.keys, this@MainActivity)
+				adaptor.notifyItemMoved(srcPos, dstPos)
+				return true
+			}
+
+			override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
+		})
+		adaptor = SshKeyListAdaptor(touchHelper, SshKeyInfo.load(this).toMutableList())
 		findViewById<RecyclerView>(R.id.recycler_ssh_keys).apply {
 			layoutManager = LinearLayoutManager(this@MainActivity)
 			adapter = adaptor
+			touchHelper.attachToRecyclerView(this)
 		}
+
 		val textGpg = findViewById<TextView>(R.id.text_gpg_key)
 		val gpgKeyId = pref.getLong(getString(R.string.key_gpg_key), -1)
 		if (gpgKeyId == -1L) {

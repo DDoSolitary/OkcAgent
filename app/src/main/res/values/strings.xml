@@ -19,6 +19,7 @@
 	<string name="error_invalid_status_fd" tools:ignore="TypographyDashes">Only writing status to stderr (--status-fd=2) is supported.</string>
 	<string name="error_option">Invalid option: <xliff:g>%s</xliff:g></string>
 	<string name="error_required_option">Required option \"<xliff:g>%s</xliff:g>\" is not found</string>
+	<string name="img_drag_handle">Drag handle</string>
 	<string name="msg_decryption_result">Decryption result: <xliff:g>%s</xliff:g></string>
 	<string name="msg_option_ignored">The option \"<xliff:g>%s</xliff:g>\" is not supported and thus ignored</string>
 	<string name="msg_signature_from">Signature from: <xliff:g>%s</xliff:g></string>
