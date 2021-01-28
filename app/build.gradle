@@ -38,7 +38,7 @@ dependencies {
 	implementation 'com.google.android.material:material:1.2.1'
 	implementation 'org.sufficientlysecure:sshauthentication-api:1.0'
 	implementation 'org.sufficientlysecure:openpgp-api:12.0'
-	implementation "com.bugsnag:bugsnag-android:5.5.1"
+	implementation "com.bugsnag:bugsnag-android:5.5.2"
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
