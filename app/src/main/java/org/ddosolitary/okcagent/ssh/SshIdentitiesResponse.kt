@@ -7,7 +7,7 @@ class SshPublicKeyInfo(val publicKey: ByteArray, val description: ByteArray)
 
 class SshIdentitiesResponse(private val keys: List<SshPublicKeyInfo>) {
 	fun toBytes(): ByteArray {
-		val bufLen = keys.sumBy { it.publicKey.size + it.description.size + Int.SIZE_BYTES * 2 } + Int.SIZE_BYTES
+		val bufLen = keys.sumOf { it.publicKey.size + it.description.size + Int.SIZE_BYTES * 2 } + Int.SIZE_BYTES
 		return ByteBuffer.allocate(bufLen).apply {
 			order(ByteOrder.BIG_ENDIAN)
 			putInt(keys.size)

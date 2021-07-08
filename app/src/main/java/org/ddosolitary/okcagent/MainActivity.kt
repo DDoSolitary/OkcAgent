@@ -68,12 +68,12 @@ class MainActivity : AppCompatActivity() {
 				textView.text = keys[position].description
 				button.visibility = View.VISIBLE
 				button.setOnClickListener {
-					keys.removeAt(holder.adapterPosition)
+					keys.removeAt(holder.bindingAdapterPosition)
 					SshKeyInfo.save(keys, it.context)
 					if (keys.size == 0) {
 						notifyItemChanged(0)
 					} else {
-						notifyItemRemoved(holder.adapterPosition)
+						notifyItemRemoved(holder.bindingAdapterPosition)
 					}
 				}
 			}
@@ -170,8 +170,8 @@ class MainActivity : AppCompatActivity() {
 				viewHolder: RecyclerView.ViewHolder,
 				target: RecyclerView.ViewHolder
 			): Boolean {
-				val srcPos = viewHolder.adapterPosition
-				val dstPos = target.adapterPosition
+				val srcPos = viewHolder.bindingAdapterPosition
+				val dstPos = target.bindingAdapterPosition
 				Collections.swap(adaptor.keys, srcPos, dstPos)
 				SshKeyInfo.save(adaptor.keys, this@MainActivity)
 				adaptor.notifyItemMoved(srcPos, dstPos)
