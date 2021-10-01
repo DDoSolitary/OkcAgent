@@ -1,11 +1,11 @@
 on: push
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       - run: |
-          sudo $ANDROID_SDK_ROOT/tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "build-tools;30.0.2" "platforms;android-30" "ndk;21.0.6113669"
+          sudo $ANDROID_SDK_ROOT/tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "build-tools;31.0.0" "platforms;android-30" "ndk;21.0.6113669"
           ./gradlew assembledebug
       - if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')
         run: |
