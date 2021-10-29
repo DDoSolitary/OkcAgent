@@ -26,8 +26,9 @@ This project consists of two components: the OkcAgent app, and command line util
 
 - Stable releases
   - [GitHub Releases](https://github.com/DDoSolitary/OkcAgent/releases)
-  - [Google Play Store](https://play.google.com/store/apps/details?id=org.ddosolitary.okcagent)
   - [F-Droid](https://f-droid.org/packages/org.ddosolitary.okcagent/)
+  - <del>[Google Play Store](https://play.google.com/store/apps/details?id=org.ddosolitary.okcagent)</del>  
+    The app has been removed from Play Store because Google requires a privacy policy and I don't know how to create one. Any help is welcome.
 - [Dev releases](https://ddosolitary-builds.sourceforge.io/OkcAgent/)
 
 ### Command line utilities
