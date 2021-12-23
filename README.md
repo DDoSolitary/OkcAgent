@@ -15,8 +15,8 @@ This tool implements the existing protocols in this field so you can seamlessly 
 
 ## Demonstration
 
-![](https://i.ibb.co/xsSP7X7/okc-ssh-agent-demo.gif)
-![](https://i.ibb.co/DYFcYqD/okc-gpg-demo.gif)
+![](https://i.ibb.co/gWfJz6Z/okc-agent.gif)
+![](https://i.ibb.co/X2PFCDm/okc-gpg.gif)
 
 ## Install
 
@@ -43,7 +43,7 @@ This project consists of two components: the OkcAgent app, and command line util
 1. Install OpenKeychain, Termux and the necessary components mentioned above.
 2. Open the app and configure the keys to be used for crypto operations.
 3. Use the command line utilities.
-    - `okc-ssh-agent` acts as an SSH agent. You can specify path of the agent socket with its first argument, and set `SSH_AUTH_SOCK` to that path to inform programs like `ssh` to connect to it.
+    - `okc-ssh-agent` acts as an SSH agent. You can use `okc-ssh-agent` as `ssh-agent`, just `eval $(okc-ssh-agent)`, it will set `SSH_AUTH_SOCK` to that path to inform programs like `ssh` to connect to it.
     - `okc-gpg` supports a limited set of GPG options so you can use it to perform some crypto operations. Read [GpgArguments.kt](https://github.com/DDoSolitary/OkcAgent/blob/master/app/src/main/java/org/ddosolitary/okcagent/gpg/GpgArguments.kt) for a complete list of supported options.
 
 ### Starting okc-ssh-agent automatically
@@ -59,6 +59,12 @@ if ! pgrep okc-ssh-agent > /dev/null; then
 	okc-ssh-agent > "$PREFIX/tmp/okc-ssh-agent.env"
 fi
 source "$PREFIX/tmp/okc-ssh-agent.env"
+```
+
+Or you can just add the following line to start it:
+
+```bash
+eval $(okc-ssh-agent)
 ```
 
 ## Notes about the app
