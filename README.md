@@ -15,7 +15,7 @@ This tool implements the existing protocols in this field so you can seamlessly 
 
 ## Demonstration
 
-![](https://i.ibb.co/gWfJz6Z/okc-agent.gif)
+![](https://i.ibb.co/zG8Mq9Q/okc-ssh-agent.gif)
 ![](https://i.ibb.co/X2PFCDm/okc-gpg.gif)
 
 ## Install
