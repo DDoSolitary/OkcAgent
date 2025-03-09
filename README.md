@@ -67,6 +67,13 @@ Or you can just add the following line to start it:
 eval $(okc-ssh-agent)
 ```
 
+### Use GPG signing with GIT
+
+If you are signing your git commits with your GPG key, you will need to add okc-gpg as a GPG program in your git settings:
+```bash
+git config --global gpg.program okc-gpg
+```
+
 ## Notes about the app
 
 This app is available in Play Store at the price of $1. I didn't intend to make profit from this project and simply consider it as a way of donation. If you don't want to pay, you can always download the dev releases for free using the links mentioned above, or even build the app from its source code. However, please note that the APK files from these two sources are signed with different keys, which means that you have to uninstall the existing app first if you want to switch between them.
