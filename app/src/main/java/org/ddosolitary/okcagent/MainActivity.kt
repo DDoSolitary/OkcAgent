@@ -91,6 +91,7 @@ class MainActivity : AppCompatActivity() {
 	}
 	private var sshApi: SshApi? = null
 	private var gpgApi: GpgApi? = null
+	private var boundProvider: String? = null
 	private lateinit var adaptor: SshKeyListAdaptor
 
 	private fun addSshKeyCallback(intent: Intent) {
@@ -230,11 +231,13 @@ class MainActivity : AppCompatActivity() {
 
 	override fun onResume() {
 		super.onResume()
-		var found = true
-		try {
-			packageManager.getPackageInfo(getString(R.string.provider_package_id), 0)
-		} catch (_: Exception) {
-			found = false
+		val found = Provider.isInstalled(this)
+		val pkg = Provider.packageId(this)
+		if (pkg != boundProvider) {
+			// The provider was changed in Settings: reconnect to the new one.
+			sshApi?.close(); sshApi = null
+			gpgApi?.close(); gpgApi = null
+			boundProvider = pkg
 		}
 		if (found) {
 			if (sshApi == null) {
@@ -289,7 +292,7 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	fun installProvider(@Suppress("UNUSED_PARAMETER") view: View) {
-		val uri = "market://details?id=%s".format(getString(R.string.provider_package_id))
+		val uri = "market://details?id=%s".format(Provider.packageId(this))
 		try {
 			startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
 		} catch (_: ActivityNotFoundException) {

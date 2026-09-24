@@ -33,6 +33,7 @@
 	<string name="notification_ssh_title">SSH Agent Service</string>
 	<string name="text_error">Error</string>
 	<string name="text_error_reporting">Automatic error reporting</string>
+	<string name="text_provider">Crypto provider</string>
 	<string name="text_error_reporting_message">This app uses the error reporting tools from Bugsnag, which will automatically send error reports to Bugsnag\'s servers when an error occurs or the app crashes. The reports contains some technical information to help the developer to diagnose and fix the errors. No personally identifiable information is collected.\nDo you want to enable automatic error reporting? You can always toggle this feature in settings later.</string>
 	<string name="text_has_gpg_key">GPG key selected: 0x<xliff:g>%016X</xliff:g></string>
 	<string name="text_no_gpg_key">No valid GPG key selected.</string>

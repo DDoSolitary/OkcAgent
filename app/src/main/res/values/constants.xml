@@ -10,4 +10,5 @@
 	<integer name="notification_id_gpg">2</integer>
 	<string name="pref_main" translatable="false">MAIN_PREFERENCES</string>
 	<string name="provider_package_id" translatable="false">org.sufficientlysecure.keychain</string>
+	<string name="key_provider" translatable="false">PROVIDER_PACKAGE</string>
 </resources>

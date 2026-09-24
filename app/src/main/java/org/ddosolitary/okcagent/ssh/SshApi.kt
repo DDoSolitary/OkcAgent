@@ -2,7 +2,7 @@ package org.ddosolitary.okcagent.ssh
 
 import android.content.Context
 import android.content.Intent
-import org.ddosolitary.okcagent.R
+import org.ddosolitary.okcagent.Provider
 import org.openintents.ssh.authentication.ISshAuthenticationService
 import org.openintents.ssh.authentication.SshAuthenticationApi
 import org.openintents.ssh.authentication.SshAuthenticationConnection
@@ -16,7 +16,7 @@ class SshApi(
 	private var api: SshAuthenticationApi? = null
 
 	fun connect() {
-		val pkg = context.getString(R.string.provider_package_id)
+		val pkg = Provider.packageId(context)
 		conn = SshAuthenticationConnection(context, pkg).also {
 			val connRes = it.connect(object : SshAuthenticationConnection.OnBound {
 				override fun onBound(service: ISshAuthenticationService) {

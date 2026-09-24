@@ -8,6 +8,12 @@
 
 	<queries>
 		<package android:name="org.sufficientlysecure.keychain" />
+		<intent>
+			<action android:name="org.openintents.ssh.authentication.ISshAuthenticationService" />
+		</intent>
+		<intent>
+			<action android:name="org.openintents.openpgp.IOpenPgpService2" />
+		</intent>
 	</queries>
 
 	<application

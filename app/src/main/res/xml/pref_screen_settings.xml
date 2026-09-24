@@ -4,4 +4,9 @@
 		app:key="@string/key_error_reporting"
 		app:icon="@drawable/ic_bug_report"
 		app:title="@string/text_error_reporting" />
+	<ListPreference
+		app:key="@string/key_provider"
+		app:icon="@drawable/ic_key"
+		app:title="@string/text_provider"
+		app:useSimpleSummaryProvider="true" />
 </androidx.preference.PreferenceScreen>

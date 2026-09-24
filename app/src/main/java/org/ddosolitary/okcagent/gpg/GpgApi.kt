@@ -2,7 +2,7 @@ package org.ddosolitary.okcagent.gpg
 
 import android.content.Context
 import android.content.Intent
-import org.ddosolitary.okcagent.R
+import org.ddosolitary.okcagent.Provider
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.util.OpenPgpApi
 import org.openintents.openpgp.util.OpenPgpServiceConnection
@@ -18,7 +18,7 @@ class GpgApi(
 	private var api: OpenPgpApi? = null
 
 	fun connect() {
-		val pkg = context.getString(R.string.provider_package_id)
+		val pkg = Provider.packageId(context)
 		conn = OpenPgpServiceConnection(context, pkg, object : OpenPgpServiceConnection.OnBound {
 			override fun onBound(service: IOpenPgpService2) {
 				api = OpenPgpApi(context, service)
